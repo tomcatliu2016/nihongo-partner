@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
+import { ArrowLeft } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { MessageBubble } from './message-bubble'
@@ -13,7 +14,13 @@ interface ChatContainerProps {
   messages: Message[]
   onSendMessage: (content: string) => Promise<void>
   onEndSession: () => void
+  onBack: () => void
+  onStartRecording?: () => void
+  onStopRecording?: () => void
   isLoading?: boolean
+  isRecording?: boolean
+  isProcessing?: boolean
+  interimTranscript?: string
 }
 
 export function ChatContainer({
@@ -21,7 +28,13 @@ export function ChatContainer({
   messages,
   onSendMessage,
   onEndSession,
+  onBack,
+  onStartRecording,
+  onStopRecording,
   isLoading,
+  isRecording,
+  isProcessing,
+  interimTranscript,
 }: ChatContainerProps) {
   const t = useTranslations('practice')
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -71,11 +84,21 @@ export function ChatContainer({
     <div className="flex h-full flex-col">
       {/* Header */}
       <div className="flex items-center justify-between border-b px-4 py-3">
-        <div>
-          <h2 className="font-semibold">{t(`scenarios.${scenario}.title`)}</h2>
-          <p className="text-sm text-muted-foreground">
-            {t(`scenarios.${scenario}.description`)}
-          </p>
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onBack}
+            disabled={isLoading}
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <div>
+            <h2 className="font-semibold">{t(`scenarios.${scenario}.title`)}</h2>
+            <p className="text-sm text-muted-foreground">
+              {t(`scenarios.${scenario}.description`)}
+            </p>
+          </div>
         </div>
         <Button variant="outline" onClick={onEndSession} disabled={isLoading}>
           {t('endSession')}
@@ -117,7 +140,12 @@ export function ChatContainer({
       {/* Input */}
       <InputArea
         onSend={onSendMessage}
+        onStartRecording={onStartRecording}
+        onStopRecording={onStopRecording}
         isLoading={isLoading}
+        isRecording={isRecording}
+        isProcessing={isProcessing}
+        interimTranscript={interimTranscript}
       />
     </div>
   )

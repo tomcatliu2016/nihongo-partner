@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "NihongoPartner",
+    "appName": "日语伴侣",
     "loading": "加载中...",
     "error": "出错了",
     "retry": "重试",
@@ -109,17 +109,26 @@
     "difficulty": {
       "label": "难度",
       "levels": {
-        "1": "入门",
-        "2": "初级",
-        "3": "中级",
-        "4": "中高级",
-        "5": "高级"
+        "1": "N5 入门",
+        "2": "N4 初级",
+        "3": "N3 中级",
+        "4": "N2 中高级",
+        "5": "N1 高级"
+      },
+      "descriptions": {
+        "1": "简单短语・仅平假名",
+        "2": "简单句子・常用汉字",
+        "3": "自然对话・标准敬语",
+        "4": "复杂表达・多种说法",
+        "5": "高级词汇・方言敬语"
       }
     },
     "input": {
       "placeholder": "输入你的回复...",
       "send": "发送",
-      "voice": "语音输入"
+      "voice": "语音输入",
+      "stop": "停止录音",
+      "processing": "识别中..."
     },
     "recording": {
       "start": "点击开始录音",
@@ -141,6 +150,9 @@
     "report": {
       "title": "对话分析报告",
       "score": "综合评分",
+      "scoreExcellent": "太棒了！表现优秀！",
+      "scoreGood": "不错，继续保持！",
+      "scoreNeedsWork": "再多练习一下吧！",
       "errors": "错误分析",
       "errorsFound": "个错误",
       "noErrors": "无错误",

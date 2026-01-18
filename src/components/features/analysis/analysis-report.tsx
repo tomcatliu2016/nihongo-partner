@@ -31,9 +31,9 @@ export function AnalysisReport({
         <CardContent className="flex flex-col items-center gap-4">
           <ScoreChart score={report.score} size="lg" />
           <p className="text-center text-muted-foreground">
-            {report.score >= 80 && '素晴らしい！よくできました！'}
-            {report.score >= 60 && report.score < 80 && 'いい調子です！'}
-            {report.score < 60 && 'もう少し練習しましょう！'}
+            {report.score >= 80 && t('report.scoreExcellent')}
+            {report.score >= 60 && report.score < 80 && t('report.scoreGood')}
+            {report.score < 60 && t('report.scoreNeedsWork')}
           </p>
         </CardContent>
       </Card>

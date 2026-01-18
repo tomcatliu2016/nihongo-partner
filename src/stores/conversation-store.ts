@@ -1,5 +1,7 @@
 import { create } from 'zustand'
 
+import type { ErrorType, ConversationError } from '@/types/analysis'
+
 export type MessageRole = 'user' | 'assistant' | 'system'
 
 export interface Message {
@@ -12,20 +14,14 @@ export interface Message {
 
 export type Scenario = 'restaurant' | 'shopping' | 'introduction'
 
-export interface AnalysisError {
-  id: string
-  type: string
-  original: string
-  correction: string
-  explanation: string
-}
+export type { ErrorType, ConversationError as AnalysisError }
 
 export interface AnalysisResult {
   sessionId: string
   scenario: Scenario
   difficulty: number
   score: number
-  errors: AnalysisError[]
+  errors: ConversationError[]
   suggestions: string[]
   createdAt: Date
 }

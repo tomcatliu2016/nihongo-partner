@@ -9,6 +9,7 @@ import { ScenarioSelector } from '@/components/features/conversation'
 import { ChatContainer } from '@/components/features/conversation'
 import { useConversationStore } from '@/stores/conversation-store'
 import { useAuth } from '@/components/auth-provider'
+import { useVoiceRecorder } from '@/hooks/use-voice-recorder'
 import type { Message, Scenario } from '@/types/conversation'
 
 export default function PracticePage() {
@@ -31,6 +32,14 @@ export default function PracticePage() {
     setAnalysis,
     reset,
   } = useConversationStore()
+
+  const {
+    isRecording,
+    isProcessing,
+    interimTranscript,
+    startRecording,
+    stopRecording,
+  } = useVoiceRecorder()
 
   const startConversation = useCallback(async (
     selectedScenario: Scenario,
@@ -140,6 +149,21 @@ export default function PracticePage() {
     }
   }
 
+  const handleStartRecording = async () => {
+    await startRecording()
+  }
+
+  const handleStopRecording = async () => {
+    const transcript = await stopRecording()
+    if (transcript) {
+      await handleSendMessage(transcript)
+    }
+  }
+
+  const handleBack = () => {
+    reset()
+  }
+
   const handleEndSession = async () => {
     if (!sessionId || !scenario) return
 
@@ -217,7 +241,13 @@ export default function PracticePage() {
           messages={messages}
           onSendMessage={handleSendMessage}
           onEndSession={handleEndSession}
+          onBack={handleBack}
+          onStartRecording={handleStartRecording}
+          onStopRecording={handleStopRecording}
           isLoading={isLoading}
+          isRecording={isRecording}
+          isProcessing={isProcessing}
+          interimTranscript={interimTranscript}
         />
       </div>
     )

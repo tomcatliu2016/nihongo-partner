@@ -1,0 +1,36 @@
+# Git
+.git
+.gitignore
+
+# Dependencies (will be installed during build)
+node_modules
+
+# Build artifacts
+.next
+out
+build
+coverage
+
+# Development files
+.env*
+!.env.production
+.vscode
+.claude
+*.pem
+service-account.json
+
+# Test files
+playwright-report
+test-results
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+
+# Documentation (optional, can include if needed)
+# docs
+
+# Misc
+.DS_Store
+*.log
+.vercel
+nul

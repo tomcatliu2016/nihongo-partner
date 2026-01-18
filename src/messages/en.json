@@ -109,17 +109,26 @@
     "difficulty": {
       "label": "Difficulty",
       "levels": {
-        "1": "Beginner",
-        "2": "Elementary",
-        "3": "Intermediate",
-        "4": "Upper Intermediate",
-        "5": "Advanced"
+        "1": "N5 Beginner",
+        "2": "N4 Elementary",
+        "3": "N3 Intermediate",
+        "4": "N2 Upper Intermediate",
+        "5": "N1 Advanced"
+      },
+      "descriptions": {
+        "1": "Simple phrases, hiragana only",
+        "2": "Simple sentences, common kanji",
+        "3": "Natural conversation, standard keigo",
+        "4": "Complex expressions, casual variants",
+        "5": "Advanced vocabulary, dialects, keigo"
       }
     },
     "input": {
       "placeholder": "Type your response...",
       "send": "Send",
-      "voice": "Voice Input"
+      "voice": "Voice Input",
+      "stop": "Stop Recording",
+      "processing": "Recognizing..."
     },
     "recording": {
       "start": "Click to start recording",
@@ -141,6 +150,9 @@
     "report": {
       "title": "Conversation Analysis Report",
       "score": "Overall Score",
+      "scoreExcellent": "Excellent! Great job!",
+      "scoreGood": "Good progress! Keep it up!",
+      "scoreNeedsWork": "Keep practicing!",
       "errors": "Error Analysis",
       "errorsFound": "errors",
       "noErrors": "No errors",

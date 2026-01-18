@@ -13,6 +13,8 @@ interface InputAreaProps {
   onStopRecording?: () => void
   isLoading?: boolean
   isRecording?: boolean
+  isProcessing?: boolean
+  interimTranscript?: string
   disabled?: boolean
 }
 
@@ -22,10 +24,16 @@ export function InputArea({
   onStopRecording,
   isLoading,
   isRecording,
+  isProcessing,
+  interimTranscript,
   disabled,
 }: InputAreaProps) {
   const t = useTranslations('practice.input')
   const [message, setMessage] = useState('')
+
+  // Show interim transcript while recording
+  const displayValue = isRecording && interimTranscript ? interimTranscript : message
+  const placeholderText = isProcessing ? t('processing') : isRecording ? t('stop') : t('placeholder')
 
   const handleSend = () => {
     if (message.trim() && !isLoading && !disabled) {
@@ -52,11 +60,12 @@ export function InputArea({
   return (
     <div className="flex gap-2 border-t bg-background p-4">
       <Textarea
-        value={message}
+        value={displayValue}
         onChange={(e) => setMessage(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder={t('placeholder')}
-        disabled={isLoading || isRecording || disabled}
+        placeholder={placeholderText}
+        disabled={isLoading || isRecording || isProcessing || disabled}
+        readOnly={isRecording}
         className="min-h-[44px] max-h-32 resize-none"
         rows={1}
       />
@@ -68,6 +77,7 @@ export function InputArea({
           onClick={handleRecordingToggle}
           disabled={isLoading || disabled}
           title={isRecording ? t('stop') : t('voice')}
+          className={isRecording ? 'animate-pulse' : ''}
         >
           {isRecording ? (
             <Square className="h-4 w-4" />

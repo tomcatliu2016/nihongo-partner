@@ -1,0 +1,38 @@
+# Dependencies
+node_modules
+
+# Build outputs
+.next
+out
+build
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+
+# Environment files
+.env*
+!.env.example
+!.env.production
+
+# Testing
+coverage
+playwright-report
+test-results
+
+# Misc
+.DS_Store
+*.log
+*.pem
+service-account.json
+.claude
+nul
+
+# Documentation (optional)
+docs
+*.md
+!README.md

@@ -53,6 +53,13 @@ export function ScenarioSelector({
                 4: t('difficulty.levels.4'),
                 5: t('difficulty.levels.5'),
               }}
+              difficultyDescriptions={{
+                1: t('difficulty.descriptions.1'),
+                2: t('difficulty.descriptions.2'),
+                3: t('difficulty.descriptions.3'),
+                4: t('difficulty.descriptions.4'),
+                5: t('difficulty.descriptions.5'),
+              }}
               onSelect={onSelect}
               isLoading={isLoading}
             />
@@ -70,6 +77,7 @@ interface ScenarioCardProps {
   description: string
   difficultyLabel: string
   difficultyLevels: Record<number, string>
+  difficultyDescriptions: Record<number, string>
   onSelect: (scenario: Scenario, difficulty: number) => void
   isLoading?: boolean
 }
@@ -81,6 +89,7 @@ function ScenarioCard({
   description,
   difficultyLabel,
   difficultyLevels,
+  difficultyDescriptions,
   onSelect,
   isLoading,
 }: ScenarioCardProps) {
@@ -111,7 +120,12 @@ function ScenarioCard({
               <SelectContent>
                 {[1, 2, 3, 4, 5].map((level) => (
                   <SelectItem key={level} value={level.toString()}>
-                    {level}. {difficultyLevels[level]}
+                    <div className="flex flex-col items-start">
+                      <span>{difficultyLevels[level]}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {difficultyDescriptions[level]}
+                      </span>
+                    </div>
                   </SelectItem>
                 ))}
               </SelectContent>
