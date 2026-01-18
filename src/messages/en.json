@@ -1,0 +1,232 @@
+{
+  "common": {
+    "appName": "NihongoPartner",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "theme": {
+      "toggle": "Toggle theme",
+      "light": "Light mode",
+      "dark": "Dark mode",
+      "system": "System preference",
+      "switchToLight": "Switch to light mode",
+      "switchToDark": "Switch to dark mode"
+    },
+    "nav": {
+      "home": "Home",
+      "dashboard": "Learning Center",
+      "practice": "Practice",
+      "analysis": "Analysis",
+      "materials": "Materials",
+      "openMenu": "Open menu",
+      "closeMenu": "Close menu",
+      "skipToContent": "Skip to main content"
+    },
+    "language": {
+      "select": "Select language",
+      "zh": "中文",
+      "ja": "日本語",
+      "en": "English"
+    }
+  },
+  "dashboard": {
+    "title": "Learning Center",
+    "welcome": "Welcome back",
+    "practice": {
+      "title": "Start Practice",
+      "description": "Choose a scenario to practice Japanese conversation",
+      "start": "Start Practice"
+    },
+    "analysis": {
+      "title": "Learning Analysis",
+      "description": "View your learning reports and weakness analysis",
+      "view": "View Reports"
+    },
+    "materials": {
+      "title": "Learning Materials",
+      "description": "Browse personalized learning content generated for you",
+      "browse": "Browse Materials"
+    },
+    "recommendations": {
+      "title": "Today's Recommendations",
+      "noRecommendations": "No recommendations yet. Start practicing to get personalized suggestions",
+      "start": "Start",
+      "priority": {
+        "high": "Recommended",
+        "medium": "Suggested",
+        "low": "Optional"
+      },
+      "reasons": {
+        "grammar": "Improve grammar skills",
+        "vocabulary": "Expand vocabulary",
+        "wordOrder": "Practice word order",
+        "politeness": "Master politeness levels",
+        "variety": "Try a new scenario",
+        "continue": "Continue practicing"
+      }
+    },
+    "recentSessions": {
+      "title": "Recent Sessions",
+      "noSessions": "No practice sessions yet",
+      "errors": "errors"
+    },
+    "progress": {
+      "title": "Learning Progress",
+      "noData": "No learning data yet. Complete a practice session to see your progress",
+      "averageScore": "Average Score",
+      "totalSessions": "Total Sessions",
+      "weakPoints": "Needs Improvement",
+      "strongPoints": "Doing Well",
+      "recentTrend": "Recent Trend"
+    }
+  },
+  "practice": {
+    "title": "Conversation Practice",
+    "selectScenario": "Please select a practice scenario",
+    "scenarios": {
+      "restaurant": {
+        "title": "Restaurant Ordering",
+        "description": "Learn common expressions for ordering at Japanese restaurants"
+      },
+      "shopping": {
+        "title": "Shopping Conversation",
+        "description": "Practice Japanese dialogue while shopping"
+      },
+      "introduction": {
+        "title": "Self Introduction",
+        "description": "Practice introducing yourself in Japanese"
+      }
+    },
+    "difficulty": {
+      "label": "Difficulty",
+      "levels": {
+        "1": "Beginner",
+        "2": "Elementary",
+        "3": "Intermediate",
+        "4": "Upper Intermediate",
+        "5": "Advanced"
+      }
+    },
+    "input": {
+      "placeholder": "Type your response...",
+      "send": "Send",
+      "voice": "Voice Input"
+    },
+    "recording": {
+      "start": "Click to start recording",
+      "stop": "Click to stop recording",
+      "processing": "Processing..."
+    },
+    "endSession": "End Conversation",
+    "continueChat": "Continue Chat",
+    "errorStarting": "Failed to start conversation. Please try again",
+    "errorSending": "Failed to send message. Please try again",
+    "errorEnding": "Failed to end conversation. Please try again"
+  },
+  "analysis": {
+    "title": "Learning Analysis",
+    "noReports": "No analysis reports yet. Complete a conversation practice to generate analysis",
+    "errorLoading": "Failed to load analysis report",
+    "errorGenerating": "Failed to generate learning material",
+    "startPractice": "Start Practice",
+    "report": {
+      "title": "Conversation Analysis Report",
+      "score": "Overall Score",
+      "errors": "Error Analysis",
+      "errorsFound": "errors",
+      "noErrors": "No errors",
+      "suggestions": "Improvement Suggestions",
+      "generateMaterial": "Generate Learning Material"
+    },
+    "errorTypes": {
+      "grammar": "Grammar Error",
+      "vocabulary": "Vocabulary Error",
+      "wordOrder": "Word Order Error",
+      "politeness": "Politeness Level"
+    },
+    "skillTypes": {
+      "grammar": "Grammar",
+      "vocabulary": "Vocabulary",
+      "wordOrder": "Word Order",
+      "politeness": "Politeness"
+    }
+  },
+  "materials": {
+    "title": "Learning Materials",
+    "noMaterials": "No learning materials yet. Complete conversation analysis to generate personalized content",
+    "errorLoading": "Failed to load learning material",
+    "startPractice": "Start Practice",
+    "types": {
+      "grammar": "Grammar Explanation",
+      "vocabulary": "Vocabulary Study",
+      "examples": "Example Sentences",
+      "quiz": "Practice Quiz"
+    },
+    "exercise": {
+      "check": "Check Answer",
+      "correct": "Correct!",
+      "incorrect": "Try again",
+      "showAnswer": "Show Answer"
+    }
+  },
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot password?",
+    "resetPassword": "Reset Password",
+    "googleLogin": "Continue with Google",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "verifyEmail": "Verify Your Email",
+    "verifyEmailDescription": "We've sent a verification email to {email}",
+    "verifyEmailSent": "Verification email sent",
+    "verifyEmailHint": "Please check your inbox and spam folder",
+    "resendVerification": "Resend verification email",
+    "emailNotVerified": "Email not verified. Some features may be restricted",
+    "loginDescription": "Sign in to your account to continue learning",
+    "registerDescription": "Create an account to start your Japanese learning journey",
+    "resetPasswordDescription": "Enter your email and we'll send you a reset link",
+    "sendResetLink": "Send Reset Link",
+    "resetEmailSent": "Reset email sent",
+    "resetEmailSentDescription": "We've sent a password reset email to {email}",
+    "checkEmail": "Check Your Email",
+    "backToLogin": "Back to Login",
+    "orContinueWith": "or",
+    "user": "User",
+    "userMenu": "User menu",
+    "loading": "Loading...",
+    "errors": {
+      "loginFailed": "Login failed. Please check your email and password",
+      "registerFailed": "Registration failed. Please try again later",
+      "googleFailed": "Google login failed. Please try again later",
+      "logoutFailed": "Logout failed",
+      "passwordMismatch": "Passwords do not match",
+      "passwordTooShort": "Password must be at least 6 characters",
+      "verifyEmailFailed": "Failed to send verification email",
+      "resetPasswordFailed": "Failed to send reset email"
+    }
+  },
+  "errors": {
+    "notFound": "Page not found",
+    "notFoundDescription": "Sorry, the page you're looking for doesn't exist or has been removed.",
+    "serverError": "Server error",
+    "serverErrorDescription": "Sorry, something went wrong on our end. Please try again later.",
+    "networkError": "Network connection failed",
+    "unauthorized": "Please login first",
+    "goHome": "Go to home",
+    "tryAgain": "Try again"
+  }
+}

@@ -1,0 +1,232 @@
+{
+  "common": {
+    "appName": "NihongoPartner",
+    "loading": "読み込み中...",
+    "error": "エラーが発生しました",
+    "retry": "再試行",
+    "cancel": "キャンセル",
+    "confirm": "確認",
+    "save": "保存",
+    "delete": "削除",
+    "edit": "編集",
+    "close": "閉じる",
+    "back": "戻る",
+    "next": "次へ",
+    "submit": "送信",
+    "theme": {
+      "toggle": "テーマ切替",
+      "light": "ライトモード",
+      "dark": "ダークモード",
+      "system": "システム設定",
+      "switchToLight": "ライトモードに切替",
+      "switchToDark": "ダークモードに切替"
+    },
+    "nav": {
+      "home": "ホーム",
+      "dashboard": "学習センター",
+      "practice": "会話練習",
+      "analysis": "学習分析",
+      "materials": "学習教材",
+      "openMenu": "メニューを開く",
+      "closeMenu": "メニューを閉じる",
+      "skipToContent": "メインコンテンツへスキップ"
+    },
+    "language": {
+      "select": "言語を選択",
+      "zh": "中文",
+      "ja": "日本語",
+      "en": "English"
+    }
+  },
+  "dashboard": {
+    "title": "学習センター",
+    "welcome": "おかえりなさい",
+    "practice": {
+      "title": "練習を始める",
+      "description": "シーンを選んで日本語会話を練習しましょう",
+      "start": "練習開始"
+    },
+    "analysis": {
+      "title": "学習分析",
+      "description": "学習レポートと弱点分析を確認",
+      "view": "レポートを見る"
+    },
+    "materials": {
+      "title": "学習教材",
+      "description": "パーソナライズされた学習コンテンツを閲覧",
+      "browse": "教材を見る"
+    },
+    "recommendations": {
+      "title": "今日のおすすめ",
+      "noRecommendations": "おすすめはまだありません。練習を始めると個別のおすすめが生成されます",
+      "start": "開始",
+      "priority": {
+        "high": "おすすめ",
+        "medium": "提案",
+        "low": "任意"
+      },
+      "reasons": {
+        "grammar": "文法を強化",
+        "vocabulary": "語彙を増やす",
+        "wordOrder": "語順を練習",
+        "politeness": "敬語を習得",
+        "variety": "新しいシーンに挑戦",
+        "continue": "練習を続ける"
+      }
+    },
+    "recentSessions": {
+      "title": "最近の練習",
+      "noSessions": "練習記録はまだありません",
+      "errors": "個のエラー"
+    },
+    "progress": {
+      "title": "学習進捗",
+      "noData": "学習データはまだありません。練習を完了すると進捗が表示されます",
+      "averageScore": "平均スコア",
+      "totalSessions": "練習回数",
+      "weakPoints": "改善が必要",
+      "strongPoints": "よくできている",
+      "recentTrend": "最近の傾向"
+    }
+  },
+  "practice": {
+    "title": "会話練習",
+    "selectScenario": "練習シーンを選択してください",
+    "scenarios": {
+      "restaurant": {
+        "title": "レストランで注文",
+        "description": "日本のレストランでの注文表現を学ぶ"
+      },
+      "shopping": {
+        "title": "買い物会話",
+        "description": "お店での日本語会話を練習"
+      },
+      "introduction": {
+        "title": "自己紹介",
+        "description": "日本語で自己紹介を練習"
+      }
+    },
+    "difficulty": {
+      "label": "難易度",
+      "levels": {
+        "1": "入門",
+        "2": "初級",
+        "3": "中級",
+        "4": "中上級",
+        "5": "上級"
+      }
+    },
+    "input": {
+      "placeholder": "返事を入力...",
+      "send": "送信",
+      "voice": "音声入力"
+    },
+    "recording": {
+      "start": "クリックして録音開始",
+      "stop": "クリックして録音停止",
+      "processing": "処理中..."
+    },
+    "endSession": "会話を終了",
+    "continueChat": "会話を続ける",
+    "errorStarting": "会話を開始できませんでした。再試行してください",
+    "errorSending": "送信に失敗しました。再試行してください",
+    "errorEnding": "会話を終了できませんでした。再試行してください"
+  },
+  "analysis": {
+    "title": "学習分析",
+    "noReports": "分析レポートはまだありません。会話練習を完了すると分析が生成されます",
+    "errorLoading": "分析レポートの読み込みに失敗しました",
+    "errorGenerating": "学習教材の生成に失敗しました",
+    "startPractice": "練習を始める",
+    "report": {
+      "title": "会話分析レポート",
+      "score": "総合スコア",
+      "errors": "エラー分析",
+      "errorsFound": "件のエラー",
+      "noErrors": "エラーなし",
+      "suggestions": "改善提案",
+      "generateMaterial": "学習教材を生成"
+    },
+    "errorTypes": {
+      "grammar": "文法エラー",
+      "vocabulary": "語彙エラー",
+      "wordOrder": "語順エラー",
+      "politeness": "敬語の使い方"
+    },
+    "skillTypes": {
+      "grammar": "文法",
+      "vocabulary": "語彙",
+      "wordOrder": "語順",
+      "politeness": "敬語"
+    }
+  },
+  "materials": {
+    "title": "学習教材",
+    "noMaterials": "学習教材はまだありません。会話分析が完了するとパーソナライズされたコンテンツが生成されます",
+    "errorLoading": "学習教材の読み込みに失敗しました",
+    "startPractice": "練習を始める",
+    "types": {
+      "grammar": "文法解説",
+      "vocabulary": "語彙学習",
+      "examples": "例文練習",
+      "quiz": "練習問題"
+    },
+    "exercise": {
+      "check": "答えを確認",
+      "correct": "正解！",
+      "incorrect": "もう一度試してください",
+      "showAnswer": "答えを表示"
+    }
+  },
+  "auth": {
+    "login": "ログイン",
+    "logout": "ログアウト",
+    "register": "登録",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "confirmPassword": "パスワード確認",
+    "forgotPassword": "パスワードをお忘れですか？",
+    "resetPassword": "パスワードをリセット",
+    "googleLogin": "Google でログイン",
+    "noAccount": "アカウントをお持ちでないですか？",
+    "hasAccount": "すでにアカウントをお持ちですか？",
+    "verifyEmail": "メールアドレスを確認",
+    "verifyEmailDescription": "{email} に確認メールを送信しました",
+    "verifyEmailSent": "確認メールを送信しました",
+    "verifyEmailHint": "受信トレイと迷惑メールフォルダをご確認ください",
+    "resendVerification": "確認メールを再送信",
+    "emailNotVerified": "メールアドレスが未確認のため、一部の機能が制限されています",
+    "loginDescription": "アカウントにログインして学習を続けましょう",
+    "registerDescription": "アカウントを作成して日本語学習を始めましょう",
+    "resetPasswordDescription": "メールアドレスを入力してください。リセットリンクをお送りします",
+    "sendResetLink": "リセットリンクを送信",
+    "resetEmailSent": "リセットメールを送信しました",
+    "resetEmailSentDescription": "{email} にパスワードリセットメールを送信しました",
+    "checkEmail": "メールをご確認ください",
+    "backToLogin": "ログインに戻る",
+    "orContinueWith": "または",
+    "user": "ユーザー",
+    "userMenu": "ユーザーメニュー",
+    "loading": "読み込み中...",
+    "errors": {
+      "loginFailed": "ログインに失敗しました。メールアドレスとパスワードをご確認ください",
+      "registerFailed": "登録に失敗しました。しばらくしてからもう一度お試しください",
+      "googleFailed": "Google ログインに失敗しました。しばらくしてからもう一度お試しください",
+      "logoutFailed": "ログアウトに失敗しました",
+      "passwordMismatch": "パスワードが一致しません",
+      "passwordTooShort": "パスワードは6文字以上必要です",
+      "verifyEmailFailed": "確認メールの送信に失敗しました",
+      "resetPasswordFailed": "リセットメールの送信に失敗しました"
+    }
+  },
+  "errors": {
+    "notFound": "ページが見つかりません",
+    "notFoundDescription": "申し訳ありませんが、お探しのページは存在しないか、削除されました。",
+    "serverError": "サーバーエラー",
+    "serverErrorDescription": "申し訳ありませんが、サーバーでエラーが発生しました。しばらくしてからもう一度お試しください。",
+    "networkError": "ネットワーク接続に失敗しました",
+    "unauthorized": "ログインしてください",
+    "goHome": "ホームへ戻る",
+    "tryAgain": "再試行"
+  }
+}

@@ -1,0 +1,232 @@
+{
+  "common": {
+    "appName": "NihongoPartner",
+    "loading": "加载中...",
+    "error": "出错了",
+    "retry": "重试",
+    "cancel": "取消",
+    "confirm": "确认",
+    "save": "保存",
+    "delete": "删除",
+    "edit": "编辑",
+    "close": "关闭",
+    "back": "返回",
+    "next": "下一步",
+    "submit": "提交",
+    "theme": {
+      "toggle": "切换主题",
+      "light": "浅色模式",
+      "dark": "深色模式",
+      "system": "跟随系统",
+      "switchToLight": "切换到浅色模式",
+      "switchToDark": "切换到深色模式"
+    },
+    "nav": {
+      "home": "首页",
+      "dashboard": "学习中心",
+      "practice": "对话练习",
+      "analysis": "学习分析",
+      "materials": "学习材料",
+      "openMenu": "打开菜单",
+      "closeMenu": "关闭菜单",
+      "skipToContent": "跳转到主内容"
+    },
+    "language": {
+      "select": "选择语言",
+      "zh": "中文",
+      "ja": "日本語",
+      "en": "English"
+    }
+  },
+  "dashboard": {
+    "title": "学习中心",
+    "welcome": "欢迎回来",
+    "practice": {
+      "title": "开始练习",
+      "description": "选择一个场景，开始日语对话练习",
+      "start": "开始练习"
+    },
+    "analysis": {
+      "title": "学习分析",
+      "description": "查看你的学习报告和薄弱点分析",
+      "view": "查看报告"
+    },
+    "materials": {
+      "title": "学习材料",
+      "description": "浏览为你生成的个性化学习内容",
+      "browse": "浏览材料"
+    },
+    "recommendations": {
+      "title": "今日推荐",
+      "noRecommendations": "暂无推荐，开始练习后将生成个性化推荐",
+      "start": "开始",
+      "priority": {
+        "high": "推荐",
+        "medium": "建议",
+        "low": "可选"
+      },
+      "reasons": {
+        "grammar": "加强语法练习",
+        "vocabulary": "扩展词汇量",
+        "wordOrder": "改进语序表达",
+        "politeness": "提升敬语使用",
+        "variety": "尝试新场景",
+        "continue": "继续练习"
+      }
+    },
+    "recentSessions": {
+      "title": "最近练习",
+      "noSessions": "暂无练习记录",
+      "errors": "个错误"
+    },
+    "progress": {
+      "title": "学习进度",
+      "noData": "暂无学习数据，完成练习后将显示进度",
+      "averageScore": "平均分数",
+      "totalSessions": "练习次数",
+      "weakPoints": "需要加强",
+      "strongPoints": "掌握良好",
+      "recentTrend": "近期趋势"
+    }
+  },
+  "practice": {
+    "title": "对话练习",
+    "selectScenario": "请选择一个练习场景",
+    "scenarios": {
+      "restaurant": {
+        "title": "餐厅点餐",
+        "description": "学习在日本餐厅点餐的常用表达"
+      },
+      "shopping": {
+        "title": "购物对话",
+        "description": "学习在商店购物时的日语对话"
+      },
+      "introduction": {
+        "title": "自我介绍",
+        "description": "练习用日语进行自我介绍"
+      }
+    },
+    "difficulty": {
+      "label": "难度",
+      "levels": {
+        "1": "入门",
+        "2": "初级",
+        "3": "中级",
+        "4": "中高级",
+        "5": "高级"
+      }
+    },
+    "input": {
+      "placeholder": "输入你的回复...",
+      "send": "发送",
+      "voice": "语音输入"
+    },
+    "recording": {
+      "start": "点击开始录音",
+      "stop": "点击停止录音",
+      "processing": "处理中..."
+    },
+    "endSession": "结束对话",
+    "continueChat": "继续对话",
+    "errorStarting": "无法开始对话，请重试",
+    "errorSending": "发送失败，请重试",
+    "errorEnding": "无法结束对话，请重试"
+  },
+  "analysis": {
+    "title": "学习分析",
+    "noReports": "暂无分析报告，完成对话练习后将生成分析",
+    "errorLoading": "加载分析报告失败",
+    "errorGenerating": "生成学习材料失败",
+    "startPractice": "开始练习",
+    "report": {
+      "title": "对话分析报告",
+      "score": "综合评分",
+      "errors": "错误分析",
+      "errorsFound": "个错误",
+      "noErrors": "无错误",
+      "suggestions": "改进建议",
+      "generateMaterial": "生成学习材料"
+    },
+    "errorTypes": {
+      "grammar": "语法错误",
+      "vocabulary": "词汇错误",
+      "wordOrder": "语序错误",
+      "politeness": "敬语使用"
+    },
+    "skillTypes": {
+      "grammar": "语法",
+      "vocabulary": "词汇",
+      "wordOrder": "语序",
+      "politeness": "敬语"
+    }
+  },
+  "materials": {
+    "title": "学习材料",
+    "noMaterials": "暂无学习材料，完成对话分析后将生成个性化内容",
+    "errorLoading": "加载学习材料失败",
+    "startPractice": "开始练习",
+    "types": {
+      "grammar": "语法讲解",
+      "vocabulary": "词汇学习",
+      "examples": "例句练习",
+      "quiz": "练习题"
+    },
+    "exercise": {
+      "check": "检查答案",
+      "correct": "正确！",
+      "incorrect": "再试一次",
+      "showAnswer": "显示答案"
+    }
+  },
+  "auth": {
+    "login": "登录",
+    "logout": "退出登录",
+    "register": "注册",
+    "email": "邮箱",
+    "password": "密码",
+    "confirmPassword": "确认密码",
+    "forgotPassword": "忘记密码？",
+    "resetPassword": "重置密码",
+    "googleLogin": "使用 Google 登录",
+    "noAccount": "还没有账号？",
+    "hasAccount": "已有账号？",
+    "verifyEmail": "验证您的邮箱",
+    "verifyEmailDescription": "我们已向 {email} 发送了验证邮件",
+    "verifyEmailSent": "验证邮件已发送",
+    "verifyEmailHint": "请检查您的收件箱和垃圾邮件文件夹",
+    "resendVerification": "重新发送验证邮件",
+    "emailNotVerified": "邮箱未验证，部分功能受限",
+    "loginDescription": "登录您的账号继续学习",
+    "registerDescription": "创建账号开始日语学习之旅",
+    "resetPasswordDescription": "输入您的邮箱，我们将发送重置链接",
+    "sendResetLink": "发送重置链接",
+    "resetEmailSent": "重置邮件已发送",
+    "resetEmailSentDescription": "我们已向 {email} 发送了密码重置邮件",
+    "checkEmail": "检查您的邮箱",
+    "backToLogin": "返回登录",
+    "orContinueWith": "或者",
+    "user": "用户",
+    "userMenu": "用户菜单",
+    "loading": "加载中...",
+    "errors": {
+      "loginFailed": "登录失败，请检查您的邮箱和密码",
+      "registerFailed": "注册失败，请稍后重试",
+      "googleFailed": "Google 登录失败，请稍后重试",
+      "logoutFailed": "退出登录失败",
+      "passwordMismatch": "两次输入的密码不一致",
+      "passwordTooShort": "密码至少需要 6 个字符",
+      "verifyEmailFailed": "发送验证邮件失败",
+      "resetPasswordFailed": "发送重置邮件失败"
+    }
+  },
+  "errors": {
+    "notFound": "页面不存在",
+    "notFoundDescription": "抱歉，您访问的页面不存在或已被移除。",
+    "serverError": "服务器错误",
+    "serverErrorDescription": "抱歉，服务器发生错误。请稍后重试。",
+    "networkError": "网络连接失败",
+    "unauthorized": "请先登录",
+    "goHome": "返回首页",
+    "tryAgain": "重试"
+  }
+}
