@@ -17,6 +17,12 @@ const SCENARIO_ICONS: Record<Scenario, string> = {
   restaurant: '🍜',
   shopping: '🛍️',
   introduction: '👋',
+  station: '🚉',
+  hotel: '🏨',
+  hospital: '🏥',
+  bank: '🏦',
+  convenience: '🏪',
+  directions: '🗺️',
 }
 
 function formatDate(date: Date | string): string {

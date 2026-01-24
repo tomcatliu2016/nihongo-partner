@@ -104,6 +104,30 @@
       "introduction": {
         "title": "自我介绍",
         "description": "练习用日语进行自我介绍"
+      },
+      "station": {
+        "title": "车站·电车",
+        "description": "练习购票和换乘问询"
+      },
+      "hotel": {
+        "title": "酒店",
+        "description": "练习入住登记和客房服务"
+      },
+      "hospital": {
+        "title": "医院·药店",
+        "description": "练习描述症状和购买药品"
+      },
+      "bank": {
+        "title": "银行·邮局",
+        "description": "练习开户和寄送包裹"
+      },
+      "convenience": {
+        "title": "便利店",
+        "description": "练习购物和使用店内服务"
+      },
+      "directions": {
+        "title": "问路指路",
+        "description": "练习询问和指引方向"
       }
     },
     "difficulty": {

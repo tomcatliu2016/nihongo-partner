@@ -17,6 +17,12 @@ const SCENARIO_ICONS: Record<Scenario, React.ReactNode> = {
   restaurant: '🍜',
   shopping: '🛍️',
   introduction: '👋',
+  station: '🚉',
+  hotel: '🏨',
+  hospital: '🏥',
+  bank: '🏦',
+  convenience: '🏪',
+  directions: '🗺️',
 }
 
 const PRIORITY_COLORS: Record<'high' | 'medium' | 'low', string> = {

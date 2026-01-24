@@ -104,6 +104,30 @@
       "introduction": {
         "title": "Self Introduction",
         "description": "Practice introducing yourself in Japanese"
+      },
+      "station": {
+        "title": "Train Station",
+        "description": "Practice buying tickets and asking for directions"
+      },
+      "hotel": {
+        "title": "Hotel",
+        "description": "Practice check-in and room requests"
+      },
+      "hospital": {
+        "title": "Hospital & Pharmacy",
+        "description": "Practice describing symptoms and buying medicine"
+      },
+      "bank": {
+        "title": "Bank & Post Office",
+        "description": "Practice opening accounts and sending packages"
+      },
+      "convenience": {
+        "title": "Convenience Store",
+        "description": "Practice shopping and using store services"
+      },
+      "directions": {
+        "title": "Asking Directions",
+        "description": "Practice asking and giving directions"
       }
     },
     "difficulty": {

@@ -104,6 +104,30 @@
       "introduction": {
         "title": "自己紹介",
         "description": "日本語で自己紹介を練習"
+      },
+      "station": {
+        "title": "駅・電車",
+        "description": "切符購入や乗り換え案内の練習"
+      },
+      "hotel": {
+        "title": "ホテル",
+        "description": "チェックインや部屋のリクエストを練習"
+      },
+      "hospital": {
+        "title": "病院・薬局",
+        "description": "症状説明や薬の購入を練習"
+      },
+      "bank": {
+        "title": "銀行・郵便局",
+        "description": "口座開設や荷物発送の会話を練習"
+      },
+      "convenience": {
+        "title": "コンビニ",
+        "description": "コンビニでの買い物やサービス利用を練習"
+      },
+      "directions": {
+        "title": "道案内",
+        "description": "道を尋ねたり教えたりする練習"
       }
     },
     "difficulty": {

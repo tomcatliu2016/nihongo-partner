@@ -1,4 +1,4 @@
-# NihongoPartner - AI 日本語学習アシスタント
+﻿# NihongoPartner - AI 日本語学習アシスタント
 
 ## プロジェクト概要
 

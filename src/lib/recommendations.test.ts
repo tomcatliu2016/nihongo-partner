@@ -21,7 +21,6 @@ function createMockAnalysis(overrides: Partial<AnalysisReport> = {}): AnalysisRe
     score: 75,
     errors: [],
     suggestions: [],
-    strengths: [],
     createdAt: new Date(),
     ...overrides,
   }
@@ -125,7 +124,9 @@ describe('generateRecommendations', () => {
     expect(recommendations.length).toBeLessThanOrEqual(3)
   })
 
-  it('provides fallback recommendation when all scenarios recently practiced', () => {
+  it('recommends unpracticed scenario when some scenarios recently practiced', () => {
+    // The function only tracks the first 3 conversations as "recent"
+    // With 9 total scenarios, there will always be unpracticed scenarios to recommend
     const analyses: AnalysisReport[] = []
     const conversations: ConversationSession[] = [
       createMockConversation({ scenario: 'restaurant' }),
@@ -136,7 +137,11 @@ describe('generateRecommendations', () => {
     const recommendations = generateRecommendations(analyses, conversations)
 
     expect(recommendations.length).toBeGreaterThan(0)
-    expect(recommendations[0].reasonKey).toBe('dashboard.recommendations.reasons.continue')
+    // Should recommend an unpracticed scenario (one of the 6 new ones)
+    expect(recommendations[0].reasonKey).toBe('dashboard.recommendations.reasons.variety')
+    expect(['station', 'hotel', 'hospital', 'bank', 'convenience', 'directions']).toContain(
+      recommendations[0].scenario
+    )
   })
 })
 

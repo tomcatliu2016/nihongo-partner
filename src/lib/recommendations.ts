@@ -15,10 +15,10 @@ import {
 const ERROR_TYPES: ErrorType[] = ['grammar', 'vocabulary', 'wordOrder', 'politeness']
 
 const ERROR_TYPE_SCENARIO_MAP: Record<ErrorType, Scenario[]> = {
-  grammar: ['introduction', 'shopping'],
-  vocabulary: ['restaurant', 'shopping'],
-  wordOrder: ['introduction', 'restaurant'],
-  politeness: ['restaurant', 'introduction'],
+  grammar: ['introduction', 'shopping', 'directions', 'hotel'],
+  vocabulary: ['restaurant', 'shopping', 'convenience', 'hospital'],
+  wordOrder: ['introduction', 'restaurant', 'bank', 'station'],
+  politeness: ['restaurant', 'introduction', 'hotel', 'bank'],
 }
 
 interface ErrorStats {
@@ -166,7 +166,17 @@ export function generateRecommendations(
 
   // If no specific weak points or need variety, recommend a scenario not recently practiced
   if (recommendations.length === 0) {
-    const allScenarios: Scenario[] = ['restaurant', 'shopping', 'introduction']
+    const allScenarios: Scenario[] = [
+      'restaurant',
+      'shopping',
+      'introduction',
+      'station',
+      'hotel',
+      'hospital',
+      'bank',
+      'convenience',
+      'directions',
+    ]
     for (const scenario of allScenarios) {
       if (!recentScenarios.has(scenario)) {
         recommendations.push({

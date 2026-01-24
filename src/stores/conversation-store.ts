@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 
 import type { ErrorType, ConversationError } from '@/types/analysis'
+import type { Scenario } from '@/types/conversation'
 
 export type MessageRole = 'user' | 'assistant' | 'system'
 
@@ -12,7 +13,7 @@ export interface Message {
   audioUrl?: string
 }
 
-export type Scenario = 'restaurant' | 'shopping' | 'introduction'
+export type { Scenario }
 
 export type { ErrorType, ConversationError as AnalysisError }
 

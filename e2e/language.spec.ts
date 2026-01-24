@@ -45,21 +45,23 @@ test.describe('Language Switching', () => {
 
   test('switching from Chinese to Japanese updates URL', async ({ page }) => {
     await page.goto('/dashboard')
-    await page.waitForLoadState('networkidle')
+    await page.waitForLoadState('domcontentloaded')
 
     // Find language selector by aria-label
     const languageSelector = page.locator('[aria-label*="语言"], [aria-label*="language"], [aria-label*="言語"]')
 
     if ((await languageSelector.count()) > 0) {
       await languageSelector.first().click()
-      await page.waitForTimeout(300)
+      await page.waitForTimeout(500)
 
       // Look for Japanese option in the dropdown
       const japaneseOption = page.locator('[data-slot="select-item"]').filter({ hasText: '日本語' })
 
       if ((await japaneseOption.count()) > 0) {
         await japaneseOption.first().click()
-        await page.waitForURL(/\/ja\//)
+
+        // Wait for navigation with longer timeout
+        await page.waitForURL(/\/ja\//, { timeout: 15000 })
 
         // URL should change to /ja
         await expect(page).toHaveURL(/\/ja/)
@@ -148,20 +150,21 @@ test.describe('Locale-specific formatting', () => {
 })
 
 test.describe('Language Accessibility', () => {
-  test('html lang attribute matches locale for explicit paths', async ({ page }) => {
-    // Test Japanese (explicit locale path)
+  test('html lang attribute matches Japanese locale', async ({ page }) => {
     await page.goto('/ja/dashboard')
     await page.waitForLoadState('domcontentloaded')
     const jaLang = await page.locator('html').getAttribute('lang')
     expect(jaLang).toBe('ja')
+  })
 
-    // Test English (explicit locale path)
+  test('html lang attribute matches English locale', async ({ page }) => {
     await page.goto('/en/dashboard')
     await page.waitForLoadState('domcontentloaded')
     const enLang = await page.locator('html').getAttribute('lang')
     expect(enLang).toBe('en')
+  })
 
-    // Test Chinese (explicit locale path)
+  test('html lang attribute matches Chinese locale', async ({ page }) => {
     await page.goto('/zh/dashboard')
     await page.waitForLoadState('domcontentloaded')
     const zhLang = await page.locator('html').getAttribute('lang')

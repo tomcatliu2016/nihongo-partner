@@ -1,7 +1,17 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { UtensilsCrossed, ShoppingBag, UserCircle } from 'lucide-react'
+import {
+  UtensilsCrossed,
+  ShoppingBag,
+  UserCircle,
+  Train,
+  Hotel,
+  Stethoscope,
+  Landmark,
+  Store,
+  MapPin,
+} from 'lucide-react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -22,9 +32,25 @@ const scenarioIcons = {
   restaurant: UtensilsCrossed,
   shopping: ShoppingBag,
   introduction: UserCircle,
+  station: Train,
+  hotel: Hotel,
+  hospital: Stethoscope,
+  bank: Landmark,
+  convenience: Store,
+  directions: MapPin,
 }
 
-const scenarios: Scenario[] = ['restaurant', 'shopping', 'introduction']
+const scenarios: Scenario[] = [
+  'restaurant',
+  'shopping',
+  'introduction',
+  'station',
+  'hotel',
+  'hospital',
+  'bank',
+  'convenience',
+  'directions',
+]
 
 export function ScenarioSelector({
   onSelect,
