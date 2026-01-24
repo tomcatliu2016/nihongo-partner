@@ -60,7 +60,7 @@ export default function AnalysisSessionPage({ params }: PageProps) {
         body: JSON.stringify({
           analysisId: sessionId,
           errorIndex,
-          language: locale, // 根据当前语言生成解释
+          language: locale, // 現在の言語に基づいて解説を生成
         }),
       })
 

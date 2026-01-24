@@ -1,98 +1,98 @@
-# NihongoPartner 技术栈
+# NihongoPartner 技術スタック
 
-> 最后更新: 2026-01-17
+> 最終更新: 2026-01-24
 
-## 概述
+## 概要
 
-本项目采用 **Next.js 全栈架构**，不需要单独的后端服务。所有后端逻辑通过 Next.js 的 API Routes 和 Server Actions 实现，部署到 Google Cloud Run 以支持 WebSocket 实时通信。
-
----
-
-## 核心技术栈
-
-### 框架层
-
-| 技术 | 版本 | 用途 |
-|------|------|------|
-| **Next.js** | 16.1.x | 全栈框架 (App Router) |
-| **React** | 19.2.x | UI 库 |
-| **TypeScript** | 5.9.x | 类型安全 |
-| **Node.js** | 22.x LTS | 运行时环境 |
-
-### UI 层
-
-| 技术 | 版本 | 用途 |
-|------|------|------|
-| **Tailwind CSS** | 4.1.x | 样式框架 |
-| **shadcn/ui** | latest | UI 组件库 |
-| **Radix UI** | latest | 无障碍基础组件 |
-| **Lucide React** | latest | 图标库 |
-| **Framer Motion** | 11.x | 动画库 |
-
-### 状态管理
-
-| 技术 | 版本 | 用途 |
-|------|------|------|
-| **Zustand** | 5.0.x | 客户端状态管理 |
-| **TanStack Query** | 5.x | 服务端状态/缓存管理 |
-
-### 国际化 (i18n)
-
-| 技术 | 版本 | 用途 |
-|------|------|------|
-| **next-intl** | 4.x | 国际化框架 |
-
-支持语言：简体中文 (zh)、日语 (ja)、英语 (en)
-
-### Google Cloud 服务
-
-| 服务 | 用途 |
-|------|------|
-| **Vertex AI (Gemini)** | 核心 AI 能力：对话理解、决策、内容生成 |
-| **Cloud Speech-to-Text** | 日语语音识别 |
-| **Cloud Text-to-Speech** | 日语语音合成 |
-| **Firestore** | 用户数据、学习历史、对话记录存储 |
-| **Cloud Run** | 应用部署（支持 WebSocket） |
-| **Cloud Storage** | 音频文件缓存（可选） |
-
-### 开发工具
-
-| 工具 | 版本 | 用途 |
-|------|------|------|
-| **pnpm** | 10.x | 包管理器 |
-| **ESLint** | 9.x | 代码检查 |
-| **Prettier** | 3.x | 代码格式化 |
-| **Vitest** | 4.0.x | 单元测试 |
-| **Playwright** | 1.x | E2E 测试 |
+本プロジェクトは **Next.js フルスタックアーキテクチャ** を採用しており、別途バックエンドサービスは必要ありません。すべてのバックエンドロジックは Next.js の API Routes と Server Actions で実装し、WebSocket リアルタイム通信をサポートするため Google Cloud Run にデプロイします。
 
 ---
 
-## 架构决策
+## コア技術スタック
 
-### 为什么选择 Next.js 全栈？
+### フレームワーク層
 
-1. **统一技术栈** - 前后端使用同一语言和框架，降低复杂度
-2. **API Routes** - 内置后端能力，无需额外服务器
-3. **Server Actions** - 简化数据变更操作
-4. **Server Components** - 更好的性能和 SEO
-5. **Google Cloud SDK** - Node.js SDK 支持良好
+| 技術 | バージョン | 用途 |
+|------|------------|------|
+| **Next.js** | 16.1.x | フルスタックフレームワーク (App Router) |
+| **React** | 19.2.x | UI ライブラリ |
+| **TypeScript** | 5.9.x | 型安全 |
+| **Node.js** | 22.x LTS | ランタイム環境 |
 
-### 为什么部署到 Cloud Run 而非 Vercel？
+### UI 層
 
-1. **WebSocket 支持** - Cloud Run 支持持久连接，Vercel Serverless 不支持
-2. **Google Cloud 集成** - 与 Vertex AI、Speech API 等服务网络延迟更低
-3. **Hackathon 要求** - 满足使用 Google Cloud 平台的要求
+| 技術 | バージョン | 用途 |
+|------|------------|------|
+| **Tailwind CSS** | 4.1.x | スタイルフレームワーク |
+| **shadcn/ui** | latest | UI コンポーネントライブラリ |
+| **Radix UI** | latest | アクセシビリティ基盤コンポーネント |
+| **Lucide React** | latest | アイコンライブラリ |
+| **Framer Motion** | 11.x | アニメーションライブラリ |
 
-### 为什么选择 Firestore？
+### 状態管理
 
-1. **实时同步** - 内置实时监听能力
-2. **免运维** - 无服务器架构
-3. **Google Cloud 原生** - 与其他 GCP 服务无缝集成
-4. **灵活数据模型** - 适合用户档案、对话记录等半结构化数据
+| 技術 | バージョン | 用途 |
+|------|------------|------|
+| **Zustand** | 5.0.x | クライアント状態管理 |
+| **TanStack Query** | 5.x | サーバー状態/キャッシュ管理 |
+
+### 国際化 (i18n)
+
+| 技術 | バージョン | 用途 |
+|------|------------|------|
+| **next-intl** | 4.x | 国際化フレームワーク |
+
+対応言語：簡体字中国語 (zh)、日本語 (ja)、英語 (en)
+
+### Google Cloud サービス
+
+| サービス | 用途 |
+|----------|------|
+| **Vertex AI (Gemini)** | コア AI 能力：会話理解、意思決定、コンテンツ生成 |
+| **Cloud Speech-to-Text** | 日本語音声認識 |
+| **Cloud Text-to-Speech** | 日本語音声合成 |
+| **Firestore** | ユーザーデータ、学習履歴、会話記録の保存 |
+| **Cloud Run** | アプリケーションデプロイ（WebSocket 対応） |
+| **Cloud Storage** | 音声ファイルキャッシュ（オプション） |
+
+### 開発ツール
+
+| ツール | バージョン | 用途 |
+|--------|------------|------|
+| **pnpm** | 10.x | パッケージマネージャー |
+| **ESLint** | 9.x | コード検査 |
+| **Prettier** | 3.x | コードフォーマット |
+| **Vitest** | 4.0.x | 単体テスト |
+| **Playwright** | 1.x | E2E テスト |
 
 ---
 
-## 系统架构图
+## アーキテクチャ決定
+
+### なぜ Next.js フルスタックを選んだのか？
+
+1. **統一技術スタック** - フロントエンドとバックエンドで同一言語とフレームワークを使用し、複雑さを低減
+2. **API Routes** - 内蔵のバックエンド機能、追加サーバー不要
+3. **Server Actions** - データ変更操作を簡素化
+4. **Server Components** - より良いパフォーマンスと SEO
+5. **Google Cloud SDK** - Node.js SDK のサポートが良好
+
+### なぜ Vercel ではなく Cloud Run にデプロイするのか？
+
+1. **WebSocket サポート** - Cloud Run は永続接続をサポート、Vercel Serverless はサポートしない
+2. **Google Cloud 統合** - Vertex AI、Speech API などのサービスとのネットワーク遅延が低い
+3. **Hackathon 要件** - Google Cloud プラットフォームの使用要件を満たす
+
+### なぜ Firestore を選んだのか？
+
+1. **リアルタイム同期** - 内蔵のリアルタイムリスニング機能
+2. **運用不要** - サーバーレスアーキテクチャ
+3. **Google Cloud ネイティブ** - 他の GCP サービスとシームレスに統合
+4. **柔軟なデータモデル** - ユーザープロファイル、会話記録などの半構造化データに適合
+
+---
+
+## システムアーキテクチャ図
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -130,54 +130,54 @@
 
 ---
 
-## 项目结构
+## プロジェクト構造
 
 ```
 nihongo-partner/
 ├── src/
 │   ├── app/
-│   │   ├── [locale]/               # 国际化路由
-│   │   │   ├── (auth)/             # 认证相关页面组
-│   │   │   ├── (main)/             # 主应用页面组
-│   │   │   │   ├── dashboard/      # 仪表板
-│   │   │   │   ├── practice/       # 对话练习
-│   │   │   │   ├── analysis/       # 学习分析
-│   │   │   │   └── materials/      # 学习材料
-│   │   │   ├── layout.tsx          # 语言布局
-│   │   │   └── page.tsx            # 首页
+│   │   ├── [locale]/               # 国際化ルーティング
+│   │   │   ├── (auth)/             # 認証関連ページグループ
+│   │   │   ├── (main)/             # メインアプリページグループ
+│   │   │   │   ├── dashboard/      # ダッシュボード
+│   │   │   │   ├── practice/       # 会話練習
+│   │   │   │   ├── analysis/       # 学習分析
+│   │   │   │   └── materials/      # 学習教材
+│   │   │   ├── layout.tsx          # 言語レイアウト
+│   │   │   └── page.tsx            # ホームページ
 │   │   └── api/                    # API Route Handlers
-│   │       ├── conversation/       # 对话相关 API
-│   │       ├── analysis/           # 分析相关 API
-│   │       ├── speech/             # 语音处理 API
-│   │       └── materials/          # 材料生成 API
+│   │       ├── conversation/       # 会話関連 API
+│   │       ├── analysis/           # 分析関連 API
+│   │       ├── speech/             # 音声処理 API
+│   │       └── materials/          # 教材生成 API
 │   │
-│   ├── i18n/                   # 国际化配置
-│   │   ├── config.ts           # 语言配置
-│   │   ├── request.ts          # 服务端请求配置
-│   │   └── routing.ts          # 路由配置
+│   ├── i18n/                   # 国際化設定
+│   │   ├── config.ts           # 言語設定
+│   │   ├── request.ts          # サーバーサイドリクエスト設定
+│   │   └── routing.ts          # ルーティング設定
 │   │
-│   ├── messages/               # 翻译文件
-│   │   ├── zh.json             # 简体中文
-│   │   ├── ja.json             # 日语
-│   │   └── en.json             # 英语
+│   ├── messages/               # 翻訳ファイル
+│   │   ├── zh.json             # 簡体字中国語
+│   │   ├── ja.json             # 日本語
+│   │   └── en.json             # 英語
 │   │
-│   ├── components/             # React 组件
-│   │   ├── ui/                 # shadcn/ui 基础组件
-│   │   ├── features/           # 功能组件
-│   │   │   ├── conversation/   # 对话相关组件
-│   │   │   ├── analysis/       # 分析相关组件
-│   │   │   └── materials/      # 材料相关组件
-│   │   └── layouts/            # 布局组件
+│   ├── components/             # React コンポーネント
+│   │   ├── ui/                 # shadcn/ui 基礎コンポーネント
+│   │   ├── features/           # 機能コンポーネント
+│   │   │   ├── conversation/   # 会話関連コンポーネント
+│   │   │   ├── analysis/       # 分析関連コンポーネント
+│   │   │   └── materials/      # 教材関連コンポーネント
+│   │   └── layouts/            # レイアウトコンポーネント
 │   │
-│   ├── lib/                    # 工具库
-│   │   ├── google-cloud/       # Google Cloud SDK 封装
-│   │   │   ├── gemini.ts       # Gemini API 客户端
-│   │   │   ├── speech.ts       # Speech API 客户端
-│   │   │   └── firestore.ts    # Firestore 客户端
-│   │   ├── utils/              # 通用工具函数
-│   │   └── constants/          # 常量定义
+│   ├── lib/                    # ユーティリティライブラリ
+│   │   ├── google-cloud/       # Google Cloud SDK ラッパー
+│   │   │   ├── gemini.ts       # Gemini API クライアント
+│   │   │   ├── speech.ts       # Speech API クライアント
+│   │   │   └── firestore.ts    # Firestore クライアント
+│   │   ├── utils/              # 汎用ユーティリティ関数
+│   │   └── constants/          # 定数定義
 │   │
-│   ├── hooks/                  # 自定义 Hooks
+│   ├── hooks/                  # カスタム Hooks
 │   │   ├── use-conversation.ts
 │   │   ├── use-speech.ts
 │   │   └── use-analysis.ts
@@ -186,39 +186,39 @@ nihongo-partner/
 │   │   ├── conversation-store.ts
 │   │   └── user-store.ts
 │   │
-│   ├── types/                  # TypeScript 类型定义
+│   ├── types/                  # TypeScript 型定義
 │   │   ├── conversation.ts
 │   │   ├── user.ts
 │   │   └── analysis.ts
 │   │
-│   └── styles/                 # 全局样式
+│   └── styles/                 # グローバルスタイル
 │       └── globals.css
 │
-├── public/                     # 静态资源
-├── tests/                      # 测试文件
-│   ├── unit/                   # 单元测试
-│   └── e2e/                    # E2E 测试
+├── public/                     # 静的アセット
+├── tests/                      # テストファイル
+│   ├── unit/                   # 単体テスト
+│   └── e2e/                    # E2E テスト
 │
-├── docs/                       # 文档
-│   ├── TECH_STACK.md           # 技术栈文档
-│   ├── FRONTEND_GUIDELINES.md  # 前端开发规范
-│   ├── API_GUIDELINES.md       # API 开发规范
-│   └── PROJECT_GUIDELINES.md   # 项目通用规范
+├── docs/                       # ドキュメント
+│   ├── TECH_STACK.md           # 技術スタックドキュメント
+│   ├── FRONTEND_GUIDELINES.md  # フロントエンド開発規約
+│   ├── API_GUIDELINES.md       # API 開発規約
+│   └── PROJECT_GUIDELINES.md   # プロジェクト規約
 │
-├── .env.example                # 环境变量示例
-├── .env.local                  # 本地环境变量 (git ignored)
-├── next.config.ts              # Next.js 配置
-├── tailwind.config.ts          # Tailwind 配置
-├── tsconfig.json               # TypeScript 配置
+├── .env.example                # 環境変数サンプル
+├── .env.local                  # ローカル環境変数 (git ignored)
+├── next.config.ts              # Next.js 設定
+├── tailwind.config.ts          # Tailwind 設定
+├── tsconfig.json               # TypeScript 設定
 ├── package.json
 ├── pnpm-lock.yaml
-├── Dockerfile                  # Cloud Run 部署
+├── Dockerfile                  # Cloud Run デプロイ
 └── README.md
 ```
 
 ---
 
-## 环境变量
+## 環境変数
 
 ```bash
 # .env.example
@@ -242,7 +242,7 @@ NODE_ENV=development
 
 ---
 
-## 依赖包清单
+## 依存パッケージ一覧
 
 ### dependencies
 
@@ -295,34 +295,34 @@ NODE_ENV=development
 
 ---
 
-## 快速开始
+## クイックスタート
 
 ```bash
-# 1. 安装依赖
+# 1. 依存関係をインストール
 pnpm install
 
-# 2. 配置环境变量
+# 2. 環境変数を設定
 cp .env.example .env.local
-# 编辑 .env.local 填入 Google Cloud 凭证
+# .env.local を編集して Google Cloud 認証情報を入力
 
-# 3. 启动开发服务器
+# 3. 開発サーバーを起動
 pnpm dev
 
-# 4. 打开浏览器
+# 4. ブラウザを開く
 open http://localhost:3000
 ```
 
 ---
 
-## 部署
+## デプロイ
 
-### Cloud Run 部署
+### Cloud Run デプロイ
 
 ```bash
-# 构建并推送镜像
+# イメージをビルドしてプッシュ
 gcloud builds submit --tag gcr.io/$PROJECT_ID/nihongo-partner
 
-# 部署到 Cloud Run
+# Cloud Run にデプロイ
 gcloud run deploy nihongo-partner \
   --image gcr.io/$PROJECT_ID/nihongo-partner \
   --platform managed \
@@ -375,20 +375,20 @@ CMD ["node", "server.js"]
 
 ---
 
-## 参考链接
+## 参考リンク
 
-- [Next.js 16 文档](https://nextjs.org/docs)
-- [React 19.2 文档](https://react.dev/)
-- [Tailwind CSS v4 文档](https://tailwindcss.com/docs)
-- [Zustand 文档](https://zustand.docs.pmnd.rs/)
+- [Next.js 16 ドキュメント](https://nextjs.org/docs)
+- [React 19.2 ドキュメント](https://react.dev/)
+- [Tailwind CSS v4 ドキュメント](https://tailwindcss.com/docs)
+- [Zustand ドキュメント](https://zustand.docs.pmnd.rs/)
 - [Google Cloud Vertex AI](https://cloud.google.com/vertex-ai/docs)
 - [Google Cloud Speech-to-Text](https://cloud.google.com/speech-to-text/docs)
-- [Cloud Run 文档](https://cloud.google.com/run/docs)
+- [Cloud Run ドキュメント](https://cloud.google.com/run/docs)
 
 ---
 
-## 相关文档
+## 関連ドキュメント
 
-- [前端开发规范](./FRONTEND_GUIDELINES.md)
-- [API 开发规范](./API_GUIDELINES.md)
-- [项目通用规范](./PROJECT_GUIDELINES.md)
+- [フロントエンド開発規約](./FRONTEND_GUIDELINES.md)
+- [API 開発規約](./API_GUIDELINES.md)
+- [プロジェクト規約](./PROJECT_GUIDELINES.md)

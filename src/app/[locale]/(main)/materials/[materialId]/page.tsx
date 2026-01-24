@@ -24,7 +24,7 @@ export default function MaterialDetailPage({ params }: PageProps) {
 
   useEffect(() => {
     async function fetchMaterial() {
-      // 支持从 sessionStorage 读取 local 材料
+      // sessionStorage からローカル教材を読み込む対応
       if (materialId === 'local') {
         try {
           const localData = sessionStorage.getItem('localMaterial')
@@ -40,7 +40,7 @@ export default function MaterialDetailPage({ params }: PageProps) {
         return
       }
 
-      // 从 API 获取材料
+      // API から教材を取得
       try {
         const response = await fetch(`/api/materials/${materialId}`)
         const data = await response.json()

@@ -1,33 +1,33 @@
-# 部署到 Google Cloud Run
+# Google Cloud Run へのデプロイ
 
-本文档介绍如何将 NihongoPartner 部署到 Google Cloud Run。
+このドキュメントでは、NihongoPartner を Google Cloud Run にデプロイする方法を説明します。
 
-## 前置条件
+## 前提条件
 
-1. **Google Cloud 账号**：已创建 GCP 项目
-2. **gcloud CLI**：已安装并登录
-3. **已启用的 API**：
+1. **Google Cloud アカウント**：GCP プロジェクトが作成済みであること
+2. **gcloud CLI**：インストール済みでログイン済みであること
+3. **有効化が必要な API**：
    - Cloud Run API
    - Cloud Build API
    - Vertex AI API
    - Cloud Speech-to-Text API
    - Cloud Text-to-Speech API
-   - Firestore API（可选）
+   - Firestore API（オプション）
 
-## 一、安装和配置 gcloud CLI
+## 一、gcloud CLI のインストールと設定
 
-### 1.1 安装 gcloud CLI
+### 1.1 gcloud CLI のインストール
 
 **Windows**（PowerShell）：
 ```powershell
-# 下载安装器
+# インストーラーをダウンロード
 (New-Object Net.WebClient).DownloadFile("https://dl.google.com/dl/cloudsdk/channels/rapid/GoogleCloudSDKInstaller.exe", "$env:Temp\GoogleCloudSDKInstaller.exe")
 
-# 运行安装器
+# インストーラーを実行
 & $env:Temp\GoogleCloudSDKInstaller.exe
 ```
 
-或者从 https://cloud.google.com/sdk/docs/install 下载安装。
+または https://cloud.google.com/sdk/docs/install からダウンロードしてインストールできます。
 
 **macOS**：
 ```bash
@@ -39,26 +39,26 @@ brew install google-cloud-sdk
 curl https://sdk.cloud.google.com | bash
 ```
 
-### 1.2 登录并配置项目
+### 1.2 ログインとプロジェクトの設定
 
 ```bash
-# 登录 Google Cloud
+# Google Cloud にログイン
 gcloud auth login
 
-# 设置项目 ID（替换为你的项目 ID）
+# プロジェクト ID を設定（ご自身のプロジェクト ID に置き換えてください）
 gcloud config set project YOUR_PROJECT_ID
 
-# 设置默认区域（推荐东京，离中国近）
+# デフォルトリージョンを設定（東京リージョンを推奨、中国から近いため）
 gcloud config set run/region asia-northeast1
 
-# 验证配置
+# 設定を確認
 gcloud config list
 ```
 
-## 二、启用必要的 API
+## 二、必要な API の有効化
 
 ```bash
-# 一次性启用所有需要的 API
+# 必要な API を一括で有効化
 gcloud services enable \
   run.googleapis.com \
   cloudbuild.googleapis.com \
@@ -69,69 +69,69 @@ gcloud services enable \
   secretmanager.googleapis.com
 ```
 
-## 三、配置服务账号和密钥
+## 三、サービスアカウントと認証情報の設定
 
-### 3.1 创建服务账号
+### 3.1 サービスアカウントの作成
 
 ```bash
-# 创建服务账号
+# サービスアカウントを作成
 gcloud iam service-accounts create nihongo-partner-sa \
   --display-name="NihongoPartner Service Account"
 
-# 获取服务账号邮箱
+# サービスアカウントのメールアドレスを取得
 SA_EMAIL="nihongo-partner-sa@YOUR_PROJECT_ID.iam.gserviceaccount.com"
 ```
 
-### 3.2 授予权限
+### 3.2 権限の付与
 
 ```bash
 PROJECT_ID=$(gcloud config get-value project)
 SA_EMAIL="nihongo-partner-sa@${PROJECT_ID}.iam.gserviceaccount.com"
 
-# Vertex AI 权限
+# Vertex AI の権限
 gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member="serviceAccount:${SA_EMAIL}" \
   --role="roles/aiplatform.user"
 
-# Speech API 权限
+# Speech API の権限
 gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member="serviceAccount:${SA_EMAIL}" \
   --role="roles/speech.client"
 
-# Text-to-Speech 权限（包含在 speech.client 中）
+# Text-to-Speech の権限（speech.client に含まれています）
 
-# Firestore 权限（如果使用）
+# Firestore の権限（使用する場合）
 gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member="serviceAccount:${SA_EMAIL}" \
   --role="roles/datastore.user"
 ```
 
-### 3.3 创建密钥并上传到 Secret Manager
+### 3.3 キーの作成と Secret Manager へのアップロード
 
 ```bash
-# 创建服务账号密钥
+# サービスアカウントキーを作成
 gcloud iam service-accounts keys create ./sa-key.json \
   --iam-account=${SA_EMAIL}
 
-# 上传到 Secret Manager
+# Secret Manager にアップロード
 gcloud secrets create nihongo-partner-sa-key \
   --data-file=./sa-key.json
 
-# 删除本地密钥文件（安全起见）
+# ローカルのキーファイルを削除（セキュリティのため）
 rm ./sa-key.json
 
-# 授予 Cloud Run 访问密钥的权限
+# Cloud Run がキーにアクセスする権限を付与
 gcloud secrets add-iam-policy-binding nihongo-partner-sa-key \
   --member="serviceAccount:${SA_EMAIL}" \
   --role="roles/secretmanager.secretAccessor"
 ```
 
-## 四、配置 Firebase Authentication（可选）
+## 四、Firebase Authentication の設定（オプション）
 
-如果使用 Firebase Auth，需要设置相关密钥：
+Firebase Auth を使用する場合は、関連する認証情報を設定する必要があります：
 
 ```bash
-# 创建 Firebase 配置密钥
+# Firebase 設定のシークレットを作成
 gcloud secrets create firebase-config --data-file=- << EOF
 {
   "apiKey": "YOUR_FIREBASE_API_KEY",
@@ -144,12 +144,12 @@ gcloud secrets create firebase-config --data-file=- << EOF
 EOF
 ```
 
-## 五、部署应用
+## 五、アプリケーションのデプロイ
 
-### 5.1 首次部署
+### 5.1 初回デプロイ
 
 ```bash
-# 从项目根目录执行
+# プロジェクトのルートディレクトリから実行
 gcloud run deploy nihongo-partner \
   --source . \
   --region asia-northeast1 \
@@ -164,7 +164,7 @@ gcloud run deploy nihongo-partner \
   --max-instances 10
 ```
 
-### 5.2 使用 Secret Manager 中的密钥
+### 5.2 Secret Manager のキーを使用する場合
 
 ```bash
 gcloud run deploy nihongo-partner \
@@ -179,41 +179,41 @@ gcloud run deploy nihongo-partner \
   --cpu 1
 ```
 
-### 5.3 部署输出
+### 5.3 デプロイ結果の出力
 
-部署成功后会显示：
+デプロイが成功すると以下のように表示されます：
 ```
 Service [nihongo-partner] revision [nihongo-partner-00001-xxx] has been deployed
 Service URL: https://nihongo-partner-xxxxxxxxxx-an.a.run.app
 ```
 
-## 六、验证部署
+## 六、デプロイの確認
 
 ```bash
-# 获取服务 URL
+# サービス URL を取得
 gcloud run services describe nihongo-partner \
   --region asia-northeast1 \
   --format="value(status.url)"
 
-# 检查服务状态
+# サービスの状態を確認
 gcloud run services list --region asia-northeast1
 ```
 
-访问输出的 URL 验证应用是否正常运行。
+出力された URL にアクセスして、アプリケーションが正常に動作しているか確認してください。
 
-## 七、更新部署
+## 七、デプロイの更新
 
-代码更新后，重新运行部署命令：
+コードを更新した後、デプロイコマンドを再実行します：
 
 ```bash
 gcloud run deploy nihongo-partner --source .
 ```
 
-或使用 Cloud Build 触发器实现自动部署（见下文）。
+または Cloud Build トリガーを使用して自動デプロイを設定することもできます（下記参照）。
 
-## 八、设置自定义域名（可选）
+## 八、カスタムドメインの設定（オプション）
 
-### 8.1 映射域名
+### 8.1 ドメインのマッピング
 
 ```bash
 gcloud run domain-mappings create \
@@ -222,15 +222,15 @@ gcloud run domain-mappings create \
   --region asia-northeast1
 ```
 
-### 8.2 配置 DNS
+### 8.2 DNS の設定
 
-按照输出的说明，在你的 DNS 提供商处添加相应记录。
+出力された指示に従って、DNS プロバイダーで適切なレコードを追加してください。
 
-## 九、CI/CD 自动部署（可选）
+## 九、CI/CD 自動デプロイ（オプション）
 
-### 9.1 创建 cloudbuild.yaml
+### 9.1 cloudbuild.yaml の作成
 
-在项目根目录创建：
+プロジェクトのルートディレクトリに作成します：
 
 ```yaml
 # cloudbuild.yaml
@@ -251,10 +251,10 @@ options:
   logging: CLOUD_LOGGING_ONLY
 ```
 
-### 9.2 设置 GitHub 触发器
+### 9.2 GitHub トリガーの設定
 
 ```bash
-# 连接 GitHub 仓库
+# GitHub リポジトリを接続
 gcloud builds triggers create github \
   --repo-name=nihongo-partner \
   --repo-owner=YOUR_GITHUB_USERNAME \
@@ -262,26 +262,26 @@ gcloud builds triggers create github \
   --build-config=cloudbuild.yaml
 ```
 
-## 十、监控和日志
+## 十、監視とログ
 
-### 10.1 查看日志
+### 10.1 ログの確認
 
 ```bash
-# 实时日志
+# リアルタイムログ
 gcloud run services logs read nihongo-partner --region asia-northeast1
 
-# 或使用 Cloud Console
+# または Cloud Console を使用
 # https://console.cloud.google.com/run/detail/asia-northeast1/nihongo-partner/logs
 ```
 
-### 10.2 查看指标
+### 10.2 メトリクスの確認
 
-访问 Cloud Console：
+Cloud Console にアクセスしてください：
 - https://console.cloud.google.com/run/detail/asia-northeast1/nihongo-partner/metrics
 
-## 十一、成本优化
+## 十一、コストの最適化
 
-### 11.1 设置最小实例为 0
+### 11.1 最小インスタンス数を 0 に設定
 
 ```bash
 gcloud run services update nihongo-partner \
@@ -289,7 +289,7 @@ gcloud run services update nihongo-partner \
   --region asia-northeast1
 ```
 
-### 11.2 设置并发数
+### 11.2 同時実行数の設定
 
 ```bash
 gcloud run services update nihongo-partner \
@@ -297,82 +297,82 @@ gcloud run services update nihongo-partner \
   --region asia-northeast1
 ```
 
-## 十二、常见问题
+## 十二、よくある質問
 
-### Q: 部署失败 "Cloud Build API has not been enabled"
+### Q: デプロイ失敗 "Cloud Build API has not been enabled"
 
 ```bash
 gcloud services enable cloudbuild.googleapis.com
 ```
 
-### Q: 应用启动后报错 "Could not load credentials"
+### Q: アプリケーション起動後に "Could not load credentials" エラー
 
-确保服务账号密钥已正确配置：
+サービスアカウントキーが正しく設定されていることを確認してください：
 ```bash
 gcloud run services update nihongo-partner \
   --set-secrets "GOOGLE_APPLICATION_CREDENTIALS=/secrets/key.json:nihongo-partner-sa-key:latest"
 ```
 
-### Q: 冷启动时间过长
+### Q: コールドスタートに時間がかかる
 
-增加最小实例数（会增加成本）：
+最小インスタンス数を増やしてください（コストが増加します）：
 ```bash
 gcloud run services update nihongo-partner --min-instances 1
 ```
 
-### Q: 如何回滚到之前的版本
+### Q: 以前のバージョンにロールバックする方法
 
 ```bash
-# 查看所有版本
+# すべてのリビジョンを表示
 gcloud run revisions list --service nihongo-partner --region asia-northeast1
 
-# 回滚到指定版本
+# 指定したリビジョンにロールバック
 gcloud run services update-traffic nihongo-partner \
   --to-revisions nihongo-partner-00001-abc=100 \
   --region asia-northeast1
 ```
 
-## 十三、清理资源
+## 十三、リソースのクリーンアップ
 
-如果不再需要，删除部署：
+不要になった場合は、デプロイを削除します：
 
 ```bash
-# 删除 Cloud Run 服务
+# Cloud Run サービスを削除
 gcloud run services delete nihongo-partner --region asia-northeast1
 
-# 删除密钥
+# シークレットを削除
 gcloud secrets delete nihongo-partner-sa-key
 
-# 删除服务账号
+# サービスアカウントを削除
 gcloud iam service-accounts delete nihongo-partner-sa@YOUR_PROJECT_ID.iam.gserviceaccount.com
 ```
 
-## 快速部署脚本
+## クイックデプロイスクリプト
 
-项目提供了快速部署脚本 `scripts/deploy.sh`，可简化部署流程。
+プロジェクトにはクイックデプロイスクリプト `scripts/deploy.sh` が用意されており、デプロイプロセスを簡素化できます。
 
-### 脚本说明
+### スクリプトの説明
 
-**脚本自动完成**：
-- ✅ 第五步：部署应用到 Cloud Run
+**スクリプトが自動的に行うこと**：
+- ✅ 第五ステップ：Cloud Run へのアプリケーションのデプロイ
 
-**仍需手动完成**：
-- ❌ 第一步：安装配置 gcloud CLI（首次）
-- ❌ 第二步：启用必要的 API（首次）
-- ⚠️ 第三步：服务账号配置（可选，不配置则使用默认账号）
-- ⚠️ 第四步：Firebase 配置（可选）
-- ⚠️ 第六步及之后：域名、CI/CD 等（按需）
+**手動で行う必要があること**：
+- ❌ 第一ステップ：gcloud CLI のインストールと設定（初回のみ）
+- ❌ 第二ステップ：必要な API の有効化（初回のみ）
+- ⚠️ 第三ステップ：サービスアカウントの設定（オプション、設定しない場合はデフォルトアカウントを使用）
+- ⚠️ 第四ステップ：Firebase の設定（オプション）
+- ⚠️ 第六ステップ以降：ドメイン、CI/CD など（必要に応じて）
 
-### 首次部署
+### 初回デプロイ
 
-首次部署前，需要先完成以下准备工作：
+初回デプロイの前に、以下の準備作業を完了する必要があります：
 
 ```bash
-# 1. 登录 Google Cloud（只需一次）
+# 1. Google Cloud にログイン（一度だけ必要）
 gcloud auth login
 gcloud config set project YOUR_PROJECT_ID
 
-# 2. 启用必要的 API（只需一次）
+# 2. 必要な API を有効化（一度だけ必要）
 gcloud services enable \
   run.googleapis.com \
   cloudbuild.googleapis.com \
@@ -380,19 +380,19 @@ gcloud services enable \
   speech.googleapis.com \
   texttospeech.googleapis.com
 
-# 3. 运行部署脚本
+# 3. デプロイスクリプトを実行
 ./scripts/deploy.sh
 ```
 
-### 后续更新
+### 以降の更新
 
-代码更新后，只需运行：
+コードを更新した後は、以下を実行するだけです：
 
 ```bash
 ./scripts/deploy.sh
 ```
 
-### 脚本内容
+### スクリプトの内容
 
 `scripts/deploy.sh`：
 
@@ -418,7 +418,7 @@ echo "Deployment complete!"
 gcloud run services describe $SERVICE_NAME --region $REGION --format="value(status.url)"
 ```
 
-### 运行脚本
+### スクリプトの実行
 
 ```bash
 # Linux / macOS / Git Bash

@@ -131,7 +131,7 @@ Respond in JSON format:
     throw new Error('No response from model')
   }
 
-  // Parse JSON from response
+  // レスポンスから JSON をパース
   const jsonMatch = text.match(/\{[\s\S]*\}/)
   if (!jsonMatch) {
     throw new Error('Invalid JSON response from model')
@@ -219,7 +219,7 @@ Respond in JSON format:
     throw new Error('No response from model')
   }
 
-  // Parse JSON from response
+  // レスポンスから JSON をパース
   const jsonMatch = text.match(/\{[\s\S]*\}/)
   if (!jsonMatch) {
     throw new Error('Invalid JSON response from model')

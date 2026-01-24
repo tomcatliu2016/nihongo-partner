@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
   try {
     const body: StartRequest = await request.json()
 
-    // Validate request
+    // リクエストの検証
     if (!body.scenario || !configs[body.scenario]) {
       throw AppError.validation('Invalid scenario')
     }
@@ -28,14 +28,14 @@ export async function POST(request: NextRequest) {
     const scenarioConfig = configs[body.scenario]
     const userId = body.userId || 'anonymous'
 
-    // Create initial message
+    // 初期メッセージを作成
     const initialMessage = {
       role: 'assistant' as const,
       content: scenarioConfig.initialMessage,
       timestamp: new Date(),
     }
 
-    // Create conversation in Firestore
+    // Firestore に会話を作成
     const session = await createConversation({
       userId,
       scenario: body.scenario,
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
       status: 'active',
     })
 
-    // Generate a temporary session ID if Firestore is not configured
+    // Firestore 未設定の場合、一時的なセッション ID を生成
     const sessionId = session?.id || `temp-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
 
     return NextResponse.json(

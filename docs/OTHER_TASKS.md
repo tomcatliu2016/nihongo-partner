@@ -1,50 +1,50 @@
-# NihongoPartner 剩余任务清单
+# NihongoPartner 残タスク一覧
 
-> 最后更新: 2026-01-18
+> 最終更新: 2026-01-18
 
-## 阶段 10: Firebase Auth 配置（代码已完成，需手动配置）
+## フェーズ 10: Firebase Auth 設定（コード完了済み、手動設定が必要）
 
-### 10.1 Firebase Console 配置
+### 10.1 Firebase Console 設定
 
-- [ ] **创建/选择 Firebase 项目**
-  - 访问 https://console.firebase.google.com
-  - 创建新项目或关联现有 GCP 项目
+- [ ] **Firebase プロジェクトの作成/選択**
+  - https://console.firebase.google.com にアクセス
+  - 新規プロジェクトを作成または既存の GCP プロジェクトを関連付け
 
-- [ ] **启用 Authentication 服务**
-  - 进入 Authentication → Sign-in method
-  - [ ] 启用 Email/Password
-  - [ ] 启用 Google
+- [ ] **Authentication サービスの有効化**
+  - Authentication → Sign-in method に移動
+  - [ ] Email/Password を有効化
+  - [ ] Google を有効化
 
-- [ ] **配置授权域名**
+- [ ] **認証ドメインの設定**
   - Authentication → Settings → Authorized domains
-  - [ ] 添加 `localhost`（开发环境）
-  - [ ] 添加生产域名（部署后）
+  - [ ] `localhost`を追加（開発環境）
+  - [ ] 本番ドメインを追加（デプロイ後）
 
-- [ ] **获取 Firebase 配置**
+- [ ] **Firebase 設定の取得**
   - Project settings → General → Your apps
-  - [ ] 添加 Web app
-  - [ ] 复制配置到 `.env.local`
+  - [ ] Web app を追加
+  - [ ] 設定を `.env.local` にコピー
 
-### 10.2 Google Cloud Console 配置
+### 10.2 Google Cloud Console 設定
 
-- [ ] **配置 OAuth 同意屏幕**
-  - 访问 https://console.cloud.google.com
+- [ ] **OAuth 同意画面の設定**
+  - https://console.cloud.google.com にアクセス
   - APIs & Services → OAuth consent screen
-  - [ ] 设置应用名称: `NihongoPartner`
-  - [ ] 设置用户支持邮箱
-  - [ ] 设置开发者联系信息
-  - [ ] 添加授权域名
+  - [ ] アプリ名を設定: `NihongoPartner`
+  - [ ] ユーザーサポートメールを設定
+  - [ ] 開発者連絡先情報を設定
+  - [ ] 認証ドメインを追加
 
-- [ ] **验证 OAuth 凭据**
+- [ ] **OAuth 認証情報の確認**
   - APIs & Services → Credentials
-  - [ ] 确认 OAuth 2.0 Client ID 已创建
-  - [ ] 确认 Authorized JavaScript origins 包含开发/生产 URL
+  - [ ] OAuth 2.0 Client ID が作成されていることを確認
+  - [ ] Authorized JavaScript origins に開発/本番 URL が含まれていることを確認
 
-### 10.3 环境变量配置
+### 10.3 環境変数の設定
 
-- [ ] **配置 `.env.local`**
+- [ ] **`.env.local` の設定**
   ```bash
-  # 从 Firebase Console 获取以下值
+  # Firebase Console から以下の値を取得
   NEXT_PUBLIC_FIREBASE_API_KEY=
   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
   NEXT_PUBLIC_FIREBASE_PROJECT_ID=
@@ -53,46 +53,46 @@
   NEXT_PUBLIC_FIREBASE_APP_ID=
   ```
 
-### 10.4 功能测试
+### 10.4 機能テスト
 
-- [ ] **Google 登录测试**
-  - [ ] 点击 Google 按钮弹出授权窗口
-  - [ ] 授权后成功跳转 Dashboard
-  - [ ] Header 显示用户头像
+- [ ] **Google ログインテスト**
+  - [ ] Google ボタンクリックで認証ウィンドウがポップアップ
+  - [ ] 認証後 Dashboard に正常リダイレクト
+  - [ ] Header にユーザーアバターが表示
 
-- [ ] **邮箱注册测试**
-  - [ ] 填写邮箱密码提交
-  - [ ] 收到验证邮件
-  - [ ] 点击验证链接完成验证
+- [ ] **メール登録テスト**
+  - [ ] メールとパスワードを入力して送信
+  - [ ] 確認メールを受信
+  - [ ] 確認リンクをクリックして検証完了
 
-- [ ] **邮箱登录测试**
-  - [ ] 已验证用户可正常登录
-  - [ ] 未验证用户显示验证提示
+- [ ] **メールログインテスト**
+  - [ ] 確認済みユーザーが正常にログイン可能
+  - [ ] 未確認ユーザーに確認プロンプトを表示
 
-- [ ] **登出测试**
-  - [ ] 点击用户菜单 → 登出
-  - [ ] 跳转到登录页
+- [ ] **ログアウトテスト**
+  - [ ] ユーザーメニュー → ログアウトをクリック
+  - [ ] ログインページにリダイレクト
 
-- [ ] **路由保护测试**
-  - [ ] 未登录访问 /dashboard 跳转 /login
-  - [ ] 登录后可正常访问
+- [ ] **ルート保護テスト**
+  - [ ] 未ログイン時の /dashboard アクセスは /login にリダイレクト
+  - [ ] ログイン後は正常にアクセス可能
 
-- [ ] **密码重置测试**
-  - [ ] 输入邮箱发送重置链接
-  - [ ] 收到重置邮件
-  - [ ] 重置密码成功
+- [ ] **パスワードリセットテスト**
+  - [ ] メールを入力してリセットリンクを送信
+  - [ ] リセットメールを受信
+  - [ ] パスワードリセット成功
 
 ---
 
-## 阶段 11: Firestore 安全规则（可选）
+## フェーズ 11: Firestore セキュリティルール（オプション）
 
-- [ ] **配置安全规则**
+- [ ] **セキュリティルールの設定**
   - Firestore → Rules
-  - [ ] 添加用户数据访问控制
-  - [ ] 添加对话数据访问控制
-  - [ ] 添加材料数据访问控制
+  - [ ] ユーザーデータのアクセス制御を追加
+  - [ ] 会話データのアクセス制御を追加
+  - [ ] 教材データのアクセス制御を追加
 
-- [ ] **规则示例**
+- [ ] **ルール例**
   ```javascript
   rules_version = '2';
   service cloud.firestore {
@@ -119,78 +119,78 @@
 
 ---
 
-## 阶段 12: 部署准备（暂缓）
+## フェーズ 12: デプロイ準備（保留）
 
-### 12.1 Docker 配置
+### 12.1 Docker 設定
 
-- [ ] 创建 `Dockerfile`
-- [ ] 创建 `.dockerignore`
-- [ ] 本地测试 Docker 构建
+- [ ] `Dockerfile` を作成
+- [ ] `.dockerignore` を作成
+- [ ] ローカルで Docker ビルドをテスト
 
-### 12.2 Cloud Run 配置
+### 12.2 Cloud Run 設定
 
-- [ ] 创建 `cloudbuild.yaml`
-- [ ] 配置 Secret Manager 存储环境变量
-- [ ] 配置 Cloud Run 服务
-- [ ] 配置自定义域名
+- [ ] `cloudbuild.yaml` を作成
+- [ ] Secret Manager で環境変数を保存するよう設定
+- [ ] Cloud Run サービスを設定
+- [ ] カスタムドメインを設定
 
-### 12.3 CI/CD 配置
+### 12.3 CI/CD 設定
 
-- [ ] 创建 `.github/workflows/ci.yml`
-  - [ ] Lint 检查
-  - [ ] 类型检查
-  - [ ] 单元测试
-  - [ ] E2E 测试
+- [ ] `.github/workflows/ci.yml` を作成
+  - [ ] Lint チェック
+  - [ ] 型チェック
+  - [ ] ユニットテスト
+  - [ ] E2E テスト
 
-- [ ] 创建 `.github/workflows/deploy.yml`
-  - [ ] 自动部署到 Cloud Run
-  - [ ] 环境变量注入
-
----
-
-## 阶段 13: 生产优化（暂缓）
-
-- [ ] **性能优化**
-  - [ ] 图片优化 (next/image)
-  - [ ] 代码分割
-  - [ ] 预加载关键资源
-
-- [ ] **SEO 优化**
-  - [ ] 完善 metadata
-  - [ ] 添加 sitemap
-  - [ ] 添加 robots.txt
-
-- [ ] **监控告警**
-  - [ ] 配置 Cloud Monitoring
-  - [ ] 配置错误告警
-  - [ ] 配置性能监控
+- [ ] `.github/workflows/deploy.yml` を作成
+  - [ ] Cloud Run への自動デプロイ
+  - [ ] 環境変数の注入
 
 ---
 
-## 快速开始清单
+## フェーズ 13: 本番最適化（保留）
 
-完成以下步骤即可开始使用：
+- [ ] **パフォーマンス最適化**
+  - [ ] 画像最適化（next/image）
+  - [ ] コード分割
+  - [ ] 重要リソースのプリロード
+
+- [ ] **SEO 最適化**
+  - [ ] metadata の完備
+  - [ ] sitemap の追加
+  - [ ] robots.txt の追加
+
+- [ ] **監視・アラート**
+  - [ ] Cloud Monitoring の設定
+  - [ ] エラーアラートの設定
+  - [ ] パフォーマンス監視の設定
+
+---
+
+## クイックスタートチェックリスト
+
+以下のステップを完了すれば使用開始できます：
 
 ```
-1. [ ] Firebase Console 创建项目
-2. [ ] 启用 Email/Password 和 Google 登录
-3. [ ] 复制 Firebase 配置到 .env.local
-4. [ ] 运行 pnpm dev 测试
+1. [ ] Firebase Console でプロジェクトを作成
+2. [ ] Email/Password と Google ログインを有効化
+3. [ ] Firebase 設定を .env.local にコピー
+4. [ ] pnpm dev を実行してテスト
 ```
 
 ---
 
-## 文件结构参考
+## ファイル構造参照
 
 ```
-已完成的 Auth 相关文件:
+完了済みの Auth 関連ファイル:
 ├── src/lib/firebase/
-│   ├── config.ts          ✅ Firebase 客户端配置
-│   ├── auth.ts            ✅ Auth 服务封装
-│   └── index.ts           ✅ 导出
+│   ├── config.ts          ✅ Firebase クライアント設定
+│   ├── auth.ts            ✅ Auth サービスラッパー
+│   └── index.ts           ✅ エクスポート
 ├── src/components/
-│   ├── auth-provider.tsx  ✅ Auth 状态管理
-│   ├── auth-guard.tsx     ✅ 路由保护
+│   ├── auth-provider.tsx  ✅ Auth 状態管理
+│   ├── auth-guard.tsx     ✅ ルート保護
 │   └── features/auth/
 │       ├── google-button.tsx      ✅
 │       ├── login-form.tsx         ✅
@@ -199,13 +199,13 @@
 │       ├── user-menu.tsx          ✅
 │       └── index.ts               ✅
 ├── src/app/[locale]/(auth)/
-│   ├── layout.tsx         ✅ Auth 页面布局
+│   ├── layout.tsx         ✅ Auth ページレイアウト
 │   ├── login/page.tsx     ✅
 │   ├── register/page.tsx  ✅
 │   ├── verify-email/page.tsx    ✅
 │   └── reset-password/page.tsx  ✅
 └── src/messages/
-    ├── zh.json            ✅ 中文翻译
-    ├── ja.json            ✅ 日文翻译
-    └── en.json            ✅ 英文翻译
+    ├── zh.json            ✅ 中国語翻訳
+    ├── ja.json            ✅ 日本語翻訳
+    └── en.json            ✅ 英語翻訳
 ```

@@ -12,7 +12,7 @@ import { SCENARIO_CONFIGS, type Scenario } from '@/types/conversation'
 interface MessageRequest {
   sessionId: string
   content: string
-  // For temp sessions without Firestore
+  // Firestore 未設定時の一時セッション用
   scenario?: Scenario
   difficulty?: number
   history?: Array<{ role: 'user' | 'assistant'; content: string }>
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
   try {
     const body: MessageRequest = await request.json()
 
-    // Validate request
+    // リクエストの検証
     if (!body.sessionId) {
       throw AppError.validation('Session ID is required')
     }
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
       throw AppError.validation('Message content is required')
     }
 
-    // Check if this is a temp session (Firestore not configured)
+    // 一時セッションかどうかを確認（Firestore 未設定の場合）
     const isTempSession = body.sessionId.startsWith('temp-')
 
     let scenario: Scenario
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     let chatHistory: Array<{ role: 'user' | 'model'; content: string }>
 
     if (isTempSession) {
-      // For temp sessions, use data from request body
+      // 一時セッションの場合、リクエストボディのデータを使用
       if (!body.scenario || !body.difficulty) {
         throw AppError.validation('Scenario and difficulty required for temp sessions')
       }
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
         content: msg.content,
       }))
     } else {
-      // Get existing conversation from Firestore
+      // Firestore から既存の会話を取得
       const conversation = await getConversation(body.sessionId)
       if (!conversation) {
         throw AppError.notFound('Conversation not found')
@@ -73,13 +73,13 @@ export async function POST(request: NextRequest) {
       throw AppError.internal('Invalid scenario configuration')
     }
 
-    // Add difficulty instruction to system prompt
+    // システムプロンプトに難易度の指示を追加
     const systemPrompt = `${scenarioConfig.systemPrompt}
 
 Current difficulty level: ${difficulty}/5
 Please adjust your language complexity accordingly.`
 
-    // Generate AI response
+    // AI レスポンスを生成
     const aiResponse = await generateChatResponse(
       systemPrompt,
       chatHistory,
@@ -88,7 +88,7 @@ Please adjust your language complexity accordingly.`
 
     const now = new Date()
 
-    // Create new messages
+    // 新しいメッセージを作成
     const userMessage = {
       role: 'user' as const,
       content: body.content,
@@ -101,9 +101,9 @@ Please adjust your language complexity accordingly.`
       timestamp: new Date(now.getTime() + 1),
     }
 
-    // Update conversation in Firestore (skip for temp sessions)
+    // Firestore の会話を更新（一時セッションの場合はスキップ）
     if (!isTempSession) {
-      // Re-fetch to get current messages for update
+      // 更新のために現在のメッセージを再取得
       const currentConversation = await getConversation(body.sessionId)
       if (currentConversation) {
         await updateConversation(body.sessionId, {

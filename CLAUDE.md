@@ -1,73 +1,73 @@
-# NihongoPartner - AI 日语学习助手
+# NihongoPartner - AI 日本語学習アシスタント
 
-## 项目概述
+## プロジェクト概要
 
-基于 Google Cloud AI 的 Agentic 日语学习应用。用户通过语音/文字与 AI 进行场景对话练习，AI 自主分析薄弱点并生成个性化学习材料。
+Google Cloud AI を活用したエージェント型日本語学習アプリケーションです。ユーザーは音声またはテキストで AI とシーン別の会話練習を行い、AI が自動的に弱点を分析して個別の学習教材を生成します。
 
-**状态**: 文档规划阶段，尚未开始编码
+**ステータス**: ドキュメント計画段階、コーディング未開始
 
-## 技术栈
+## 技術スタック
 
-- **框架**: Next.js 16 (App Router) + React 19 + TypeScript 5.9
-- **样式**: Tailwind CSS 4 + shadcn/ui
-- **状态**: Zustand 5 + TanStack Query 5
-- **国际化**: next-intl 4 (zh/ja/en)
+- **フレームワーク**: Next.js 16 (App Router) + React 19 + TypeScript 5.9
+- **スタイル**: Tailwind CSS 4 + shadcn/ui
+- **状態管理**: Zustand 5 + TanStack Query 5
+- **国際化**: next-intl 4 (zh/ja/en)
 - **AI**: Google Vertex AI (Gemini)
-- **语音**: Google Speech-to-Text / Text-to-Speech
-- **数据库**: Firestore
-- **部署**: Cloud Run (支持 WebSocket)
-- **包管理**: pnpm 10
+- **音声**: Google Speech-to-Text / Text-to-Speech
+- **データベース**: Firestore
+- **デプロイ**: Cloud Run（WebSocket 対応）
+- **パッケージ管理**: pnpm 10
 
-## 项目结构
+## プロジェクト構造
 
 ```
 src/
 ├── app/
-│   ├── [locale]/          # 国际化路由
-│   │   ├── (auth)/        # 认证页面
-│   │   └── (main)/        # 主功能页面
+│   ├── [locale]/          # 国際化ルーティング
+│   │   ├── (auth)/        # 認証ページ
+│   │   └── (main)/        # メイン機能ページ
 │   └── api/               # API Routes
 ├── components/
-│   ├── ui/                # shadcn/ui 组件
-│   └── features/          # 业务组件
-├── lib/google-cloud/      # GCP SDK 封装
-├── hooks/                 # 自定义 Hooks
+│   ├── ui/                # shadcn/ui コンポーネント
+│   └── features/          # 機能コンポーネント
+├── lib/google-cloud/      # GCP SDK ラッパー
+├── hooks/                 # カスタム Hooks
 ├── stores/                # Zustand Stores
-├── i18n/                  # 国际化配置
-├── messages/              # 翻译文件 (zh/ja/en.json)
-└── types/                 # TypeScript 类型
+├── i18n/                  # 国際化設定
+├── messages/              # 翻訳ファイル（zh/ja/en.json）
+└── types/                 # TypeScript 型定義
 ```
 
-## 核心功能
+## コア機能
 
-1. **场景对话** - 餐厅/购物/自我介绍等场景的语音对话练习
-2. **智能分析** - 对话后自动分析错误，识别薄弱点
-3. **材料生成** - 根据薄弱点实时生成学习内容
-4. **路径推荐** - 基于历史数据推荐下次练习内容
+1. **シーン会話** - レストラン/買い物/自己紹介などのシーンでの音声会話練習
+2. **スマート分析** - 会話後に自動でエラーを分析し、弱点を特定
+3. **教材生成** - 弱点に基づいてリアルタイムで学習コンテンツを生成
+4. **パス推薦** - 履歴データに基づいて次の練習内容を推薦
 
-## 文档索引
+## ドキュメント索引
 
-| 文档 | 内容 |
-|------|------|
-| [NihongoPartner.md](./NihongoPartner.md) | PRD - 产品需求、用户故事、验收标准 |
-| [docs/TECH_STACK.md](./docs/TECH_STACK.md) | 技术选型、架构图、依赖版本、部署配置 |
-| [docs/FRONTEND_GUIDELINES.md](./docs/FRONTEND_GUIDELINES.md) | 组件规范、样式、状态管理、i18n、测试 |
-| [docs/API_GUIDELINES.md](./docs/API_GUIDELINES.md) | Route Handlers、Server Actions、错误处理、GCP 集成 |
-| [docs/PROJECT_GUIDELINES.md](./docs/PROJECT_GUIDELINES.md) | ESLint/Prettier 配置、Git 规范、CI/CD |
+| ドキュメント | 内容 |
+|--------------|------|
+| [NihongoPartner.md](./NihongoPartner.md) | PRD - 製品要件、ユーザーストーリー、受け入れ基準 |
+| [docs/TECH_STACK.md](./docs/TECH_STACK.md) | 技術選定、アーキテクチャ図、依存バージョン、デプロイ設定 |
+| [docs/FRONTEND_GUIDELINES.md](./docs/FRONTEND_GUIDELINES.md) | コンポーネント規約、スタイル、状態管理、i18n、テスト |
+| [docs/API_GUIDELINES.md](./docs/API_GUIDELINES.md) | Route Handlers、Server Actions、エラー処理、GCP 連携 |
+| [docs/PROJECT_GUIDELINES.md](./docs/PROJECT_GUIDELINES.md) | ESLint/Prettier 設定、Git 規約、CI/CD |
 
-## 开发规范要点
+## 開発規約のポイント
 
-- 组件文件用 kebab-case，组件名用 PascalCase
-- 优先使用 Server Components，需要交互时用 `'use client'`
-- 类型导入用 `import type { X }`
-- API 错误统一用 `AppError` 类，支持多语言错误消息
-- 所有用户可见文本必须使用 `useTranslations()` 国际化
+- コンポーネントファイルは kebab-case、コンポーネント名は PascalCase
+- Server Components を優先し、インタラクションが必要な場合は `'use client'` を使用
+- 型インポートは `import type { X }` を使用
+- API エラーは `AppError` クラスで統一し、多言語エラーメッセージに対応
+- ユーザーに表示されるすべてのテキストは `useTranslations()` で国際化
 
-## 常用命令
+## よく使うコマンド
 
 ```bash
-pnpm dev          # 启动开发服务器
-pnpm build        # 生产构建
-pnpm lint         # 代码检查
-pnpm test         # 运行测试
+pnpm dev          # 開発サーバーを起動
+pnpm build        # 本番ビルド
+pnpm lint         # コードチェック
+pnpm test         # テストを実行
 ```

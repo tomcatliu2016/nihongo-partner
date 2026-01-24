@@ -24,7 +24,7 @@ export default function LocalAnalysisPage() {
 
   useEffect(() => {
     if (lastAnalysis) {
-      // Convert store analysis to report format
+      // ストアの分析結果をレポート形式に変換
       setReport({
         id: 'local',
         userId: 'anonymous',
@@ -49,12 +49,12 @@ export default function LocalAnalysisPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          // Pass error details directly for temp generation
+          // 一時生成用にエラー詳細を直接渡す
           errorType: error.type,
           original: error.original,
           correction: error.correction,
           explanation: error.explanation,
-          language: locale, // 根据当前语言生成解释
+          language: locale, // 現在の言語に基づいて解説を生成
         }),
       })
 
@@ -67,7 +67,7 @@ export default function LocalAnalysisPage() {
       if (data.data.materialId) {
         router.push(`/materials/${data.data.materialId}`)
       } else if (data.data.material) {
-        // Store material locally and navigate
+        // 教材をローカルに保存してナビゲート
         sessionStorage.setItem('localMaterial', JSON.stringify(data.data.material))
         router.push('/materials/local')
       }

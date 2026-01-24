@@ -48,5 +48,8 @@ nul
 playwright-report
 test-results
 
-# demo recording (not for git)
+
 /demo
+/specs
+/.specify
+/.idea

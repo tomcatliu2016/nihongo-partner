@@ -1,36 +1,36 @@
-# API 开发规范
+# API 開発ガイドライン
 
-> 最后更新: 2026-01-17
+> 最終更新: 2026-01-17
 
-## 目录
+## 目次
 
-1. [API 架构](#1-api-架构)
+1. [API アーキテクチャ](#1-api-アーキテクチャ)
 2. [Route Handlers](#2-route-handlers)
 3. [Server Actions](#3-server-actions)
-4. [数据验证](#4-数据验证)
-5. [错误处理](#5-错误处理)
-6. [Google Cloud 集成](#6-google-cloud-集成)
-7. [安全规范](#7-安全规范)
-8. [国际化 (i18n)](#8-国际化-i18n)
-9. [测试规范](#9-测试规范)
+4. [データバリデーション](#4-データバリデーション)
+5. [エラーハンドリング](#5-エラーハンドリング)
+6. [Google Cloud 統合](#6-google-cloud-統合)
+7. [セキュリティ規約](#7-セキュリティ規約)
+8. [国際化 (i18n)](#8-国際化-i18n)
+9. [テスト規約](#9-テスト規約)
 
 ---
 
-## 1. API 架构
+## 1. API アーキテクチャ
 
-### 1.1 目录结构
+### 1.1 ディレクトリ構造
 
 ```
 src/app/api/
 ├── conversation/
-│   ├── route.ts              # POST /api/conversation - 创建会话
+│   ├── route.ts              # POST /api/conversation - 会話を作成
 │   ├── [sessionId]/
 │   │   ├── route.ts          # GET/DELETE /api/conversation/[sessionId]
 │   │   └── message/
 │   │       └── route.ts      # POST /api/conversation/[sessionId]/message
 │
 ├── analysis/
-│   ├── route.ts              # POST /api/analysis - 生成分析
+│   ├── route.ts              # POST /api/analysis - 分析を生成
 │   └── [sessionId]/
 │       └── route.ts          # GET /api/analysis/[sessionId]
 │
@@ -41,7 +41,7 @@ src/app/api/
 │       └── route.ts          # POST /api/speech/synthesize
 │
 ├── materials/
-│   ├── route.ts              # POST /api/materials - 生成材料
+│   ├── route.ts              # POST /api/materials - 教材を生成
 │   └── [materialId]/
 │       └── route.ts          # GET /api/materials/[materialId]
 │
@@ -51,20 +51,20 @@ src/app/api/
         └── route.ts          # GET/PATCH /api/user/profile
 ```
 
-### 1.2 RESTful 设计原则
+### 1.2 RESTful 設計原則
 
-| HTTP 方法 | 用途 | 示例 |
+| HTTP メソッド | 用途 | 例 |
 |-----------|------|------|
-| GET | 获取资源 | `GET /api/conversation/123` |
-| POST | 创建资源 | `POST /api/conversation` |
-| PATCH | 部分更新 | `PATCH /api/user/profile` |
-| PUT | 完全替换 | `PUT /api/conversation/123` |
-| DELETE | 删除资源 | `DELETE /api/conversation/123` |
+| GET | リソースを取得します | `GET /api/conversation/123` |
+| POST | リソースを作成します | `POST /api/conversation` |
+| PATCH | 部分的に更新します | `PATCH /api/user/profile` |
+| PUT | 完全に置換します | `PUT /api/conversation/123` |
+| DELETE | リソースを削除します | `DELETE /api/conversation/123` |
 
-### 1.3 响应格式
+### 1.3 レスポンス形式
 
 ```typescript
-// 成功响应
+// 成功レスポンス
 interface SuccessResponse<T> {
   success: true
   data: T
@@ -75,7 +75,7 @@ interface SuccessResponse<T> {
   }
 }
 
-// 错误响应
+// エラーレスポンス
 interface ErrorResponse {
   success: false
   error: {
@@ -85,7 +85,7 @@ interface ErrorResponse {
   }
 }
 
-// 类型定义
+// 型定義
 type ApiResponse<T> = SuccessResponse<T> | ErrorResponse
 ```
 
@@ -93,7 +93,7 @@ type ApiResponse<T> = SuccessResponse<T> | ErrorResponse
 
 ## 2. Route Handlers
 
-### 2.1 基本结构
+### 2.1 基本構造
 
 ```typescript
 // app/api/conversation/route.ts
@@ -102,7 +102,7 @@ import { z } from 'zod'
 import { getServerSession } from '@/lib/auth'
 import { createConversation } from '@/lib/services/conversation'
 
-// 请求体验证 Schema
+// リクエストボディバリデーション Schema
 const CreateConversationSchema = z.object({
   scenario: z.enum(['restaurant', 'shopping', 'introduction']),
   difficulty: z.number().int().min(1).max(5).default(1),
@@ -110,19 +110,19 @@ const CreateConversationSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    // 1. 认证检查
+    // 1. 認証チェック
     const session = await getServerSession()
     if (!session) {
       return NextResponse.json(
         {
           success: false,
-          error: { code: 'UNAUTHORIZED', message: '请先登录' },
+          error: { code: 'UNAUTHORIZED', message: 'ログインしてください' },
         },
         { status: 401 }
       )
     }
 
-    // 2. 解析和验证请求体
+    // 2. リクエストボディの解析とバリデーション
     const body = await request.json()
     const result = CreateConversationSchema.safeParse(body)
 
@@ -132,7 +132,7 @@ export async function POST(request: NextRequest) {
           success: false,
           error: {
             code: 'VALIDATION_ERROR',
-            message: '请求参数无效',
+            message: 'リクエストパラメータが無効です',
             details: result.error.flatten(),
           },
         },
@@ -140,13 +140,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 3. 业务逻辑
+    // 3. ビジネスロジック
     const conversation = await createConversation({
       userId: session.userId,
       ...result.data,
     })
 
-    // 4. 返回响应
+    // 4. レスポンスを返却
     return NextResponse.json(
       { success: true, data: conversation },
       { status: 201 }
@@ -156,7 +156,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        error: { code: 'INTERNAL_ERROR', message: '服务器内部错误' },
+        error: { code: 'INTERNAL_ERROR', message: 'サーバー内部エラーが発生しました' },
       },
       { status: 500 }
     )
@@ -164,7 +164,7 @@ export async function POST(request: NextRequest) {
 }
 ```
 
-### 2.2 动态路由
+### 2.2 動的ルート
 
 ```typescript
 // app/api/conversation/[sessionId]/route.ts
@@ -183,7 +183,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     return NextResponse.json(
       {
         success: false,
-        error: { code: 'NOT_FOUND', message: '会话不存在' },
+        error: { code: 'NOT_FOUND', message: '会話が見つかりません' },
       },
       { status: 404 }
     )
@@ -201,7 +201,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 }
 ```
 
-### 2.3 查询参数处理
+### 2.3 クエリパラメータの処理
 
 ```typescript
 // app/api/conversation/route.ts
@@ -235,7 +235,7 @@ export async function GET(request: NextRequest) {
 }
 ```
 
-### 2.4 流式响应
+### 2.4 ストリーミングレスポンス
 
 ```typescript
 // app/api/conversation/[sessionId]/message/route.ts
@@ -261,7 +261,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
 ## 3. Server Actions
 
-### 3.1 基本结构
+### 3.1 基本構造
 
 ```typescript
 // app/actions/conversation.ts
@@ -278,37 +278,37 @@ const SendMessageSchema = z.object({
 })
 
 export async function sendMessage(formData: FormData) {
-  // 1. 认证
+  // 1. 認証
   const session = await getServerSession()
   if (!session) {
     throw new Error('Unauthorized')
   }
 
-  // 2. 验证
+  // 2. バリデーション
   const result = SendMessageSchema.safeParse({
     sessionId: formData.get('sessionId'),
     content: formData.get('content'),
   })
 
   if (!result.success) {
-    return { error: '消息格式无效' }
+    return { error: 'メッセージ形式が無効です' }
   }
 
-  // 3. 业务逻辑
+  // 3. ビジネスロジック
   try {
     const response = await processMessage(result.data)
 
-    // 4. 重新验证缓存
+    // 4. キャッシュを再検証
     revalidatePath(`/practice/${result.data.sessionId}`)
 
     return { success: true, data: response }
   } catch (error) {
-    return { error: '发送失败，请重试' }
+    return { error: '送信に失敗しました。もう一度お試しください' }
   }
 }
 ```
 
-### 3.2 带类型安全的 Action
+### 3.2 型安全な Action
 
 ```typescript
 // app/actions/analysis.ts
@@ -328,7 +328,7 @@ export const generateAnalysis = actionClient
     return analysis
   })
 
-// 在组件中使用
+// コンポーネントでの使用
 'use client'
 
 import { useAction } from 'next-safe-action/hooks'
@@ -342,7 +342,7 @@ function AnalysisButton({ sessionId }: { sessionId: string }) {
       onClick={() => execute({ sessionId })}
       disabled={status === 'executing'}
     >
-      {status === 'executing' ? '分析中...' : '生成分析报告'}
+      {status === 'executing' ? '分析中...' : '分析レポートを生成'}
     </button>
   )
 }
@@ -350,31 +350,31 @@ function AnalysisButton({ sessionId }: { sessionId: string }) {
 
 ### 3.3 Server Action vs Route Handler
 
-| 场景 | 推荐方式 |
+| シナリオ | 推奨方式 |
 |------|----------|
-| 表单提交 | Server Action |
-| 数据变更（增删改） | Server Action |
-| 获取数据列表 | Route Handler + TanStack Query |
-| 需要流式响应 | Route Handler |
-| 第三方 Webhook | Route Handler |
-| 文件上传 | Route Handler |
+| フォーム送信 | Server Action |
+| データ変更（CRUD） | Server Action |
+| データリストの取得 | Route Handler + TanStack Query |
+| ストリーミングレスポンスが必要 | Route Handler |
+| サードパーティ Webhook | Route Handler |
+| ファイルアップロード | Route Handler |
 | WebSocket | Route Handler |
 
 ---
 
-## 4. 数据验证
+## 4. データバリデーション
 
-### 4.1 Zod Schema 定义
+### 4.1 Zod Schema 定義
 
 ```typescript
 // lib/validations/conversation.ts
 import { z } from 'zod'
 
-// 基础类型
+// 基本型
 export const ScenarioSchema = z.enum(['restaurant', 'shopping', 'introduction'])
 export const DifficultySchema = z.number().int().min(1).max(5)
 
-// 消息 Schema
+// メッセージ Schema
 export const MessageSchema = z.object({
   id: z.string().uuid(),
   role: z.enum(['user', 'agent']),
@@ -383,31 +383,31 @@ export const MessageSchema = z.object({
   timestamp: z.coerce.date(),
 })
 
-// 创建会话请求
+// 会話作成リクエスト
 export const CreateConversationSchema = z.object({
   scenario: ScenarioSchema,
   difficulty: DifficultySchema.default(1),
 })
 
-// 发送消息请求
+// メッセージ送信リクエスト
 export const SendMessageSchema = z.object({
   content: z.string().min(1).max(2000),
   audioBase64: z.string().optional(),
 })
 
-// 分页参数
+// ページネーションパラメータ
 export const PaginationSchema = z.object({
   page: z.coerce.number().int().positive().default(1),
   pageSize: z.coerce.number().int().min(1).max(100).default(10),
 })
 
-// 导出类型
+// 型をエクスポート
 export type Scenario = z.infer<typeof ScenarioSchema>
 export type Message = z.infer<typeof MessageSchema>
 export type CreateConversationInput = z.infer<typeof CreateConversationSchema>
 ```
 
-### 4.2 验证工具函数
+### 4.2 バリデーションユーティリティ関数
 
 ```typescript
 // lib/utils/validation.ts
@@ -428,7 +428,7 @@ export function validateRequest<T extends z.ZodSchema>(
           success: false,
           error: {
             code: 'VALIDATION_ERROR',
-            message: '请求参数无效',
+            message: 'リクエストパラメータが無効です',
             details: result.error.flatten(),
           },
         },
@@ -440,7 +440,7 @@ export function validateRequest<T extends z.ZodSchema>(
   return { success: true, data: result.data }
 }
 
-// 使用示例
+// 使用例
 export async function POST(request: NextRequest) {
   const body = await request.json()
   const validation = validateRequest(CreateConversationSchema, body)
@@ -449,7 +449,7 @@ export async function POST(request: NextRequest) {
     return validation.error
   }
 
-  // validation.data 已经是类型安全的
+  // validation.data は型安全です
   const conversation = await createConversation(validation.data)
   // ...
 }
@@ -457,9 +457,9 @@ export async function POST(request: NextRequest) {
 
 ---
 
-## 5. 错误处理
+## 5. エラーハンドリング
 
-### 5.1 自定义错误类
+### 5.1 カスタムエラークラス
 
 ```typescript
 // lib/errors.ts
@@ -483,35 +483,35 @@ export class ValidationError extends AppError {
 }
 
 export class AuthenticationError extends AppError {
-  constructor(message = '请先登录') {
+  constructor(message = 'ログインしてください') {
     super('UNAUTHORIZED', message, 401)
     this.name = 'AuthenticationError'
   }
 }
 
 export class AuthorizationError extends AppError {
-  constructor(message = '无权访问此资源') {
+  constructor(message = 'このリソースにアクセスする権限がありません') {
     super('FORBIDDEN', message, 403)
     this.name = 'AuthorizationError'
   }
 }
 
 export class NotFoundError extends AppError {
-  constructor(resource = '资源') {
-    super('NOT_FOUND', `${resource}不存在`, 404)
+  constructor(resource = 'リソース') {
+    super('NOT_FOUND', `${resource}が見つかりません`, 404)
     this.name = 'NotFoundError'
   }
 }
 
 export class RateLimitError extends AppError {
-  constructor(message = '请求过于频繁，请稍后再试') {
+  constructor(message = 'リクエストが多すぎます。しばらくしてからもう一度お試しください') {
     super('RATE_LIMIT_EXCEEDED', message, 429)
     this.name = 'RateLimitError'
   }
 }
 ```
 
-### 5.2 错误处理中间件
+### 5.2 エラーハンドリングミドルウェア
 
 ```typescript
 // lib/utils/api-handler.ts
@@ -544,13 +544,13 @@ export function withErrorHandler(handler: Handler): Handler {
         )
       }
 
-      // 未知错误
+      // 未知のエラー
       return NextResponse.json(
         {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: '服务器内部错误',
+            message: 'サーバー内部エラーが発生しました',
           },
         },
         { status: 500 }
@@ -559,7 +559,7 @@ export function withErrorHandler(handler: Handler): Handler {
   }
 }
 
-// 使用示例
+// 使用例
 export const GET = withErrorHandler(async (request) => {
   const session = await getServerSession()
   if (!session) {
@@ -571,7 +571,7 @@ export const GET = withErrorHandler(async (request) => {
 })
 ```
 
-### 5.3 日志记录
+### 5.3 ロギング
 
 ```typescript
 // lib/utils/logger.ts
@@ -646,9 +646,9 @@ export const logger = new Logger()
 
 ---
 
-## 6. Google Cloud 集成
+## 6. Google Cloud 統合
 
-### 6.1 Gemini API 客户端
+### 6.1 Gemini API クライアント
 
 ```typescript
 // lib/google-cloud/gemini.ts
@@ -681,14 +681,14 @@ export async function chat(options: GeminiChatOptions): Promise<string> {
     },
   })
 
-  // 发送历史消息
+  // 履歴メッセージを送信
   for (const message of messages.slice(0, -1)) {
     if (message.role === 'user') {
       await chat.sendMessage(message.content)
     }
   }
 
-  // 发送最新消息并获取响应
+  // 最新のメッセージを送信してレスポンスを取得
   const lastMessage = messages[messages.length - 1]
   const result = await chat.sendMessage(lastMessage.content)
   const response = result.response
@@ -718,7 +718,7 @@ export async function* streamChat(
 }
 ```
 
-### 6.2 Speech API 客户端
+### 6.2 Speech API クライアント
 
 ```typescript
 // lib/google-cloud/speech.ts
@@ -782,14 +782,14 @@ export async function synthesize(options: SynthesizeOptions): Promise<Buffer> {
 }
 ```
 
-### 6.3 Firestore 客户端
+### 6.3 Firestore クライアント
 
 ```typescript
 // lib/google-cloud/firestore.ts
 import { initializeApp, getApps, cert } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
 
-// 初始化 Firebase Admin
+// Firebase Admin を初期化
 if (getApps().length === 0) {
   initializeApp({
     credential: cert({
@@ -802,14 +802,14 @@ if (getApps().length === 0) {
 
 export const db = getFirestore()
 
-// 集合引用
+// コレクション参照
 export const collections = {
   users: db.collection('users'),
   conversations: db.collection('conversations'),
   materials: db.collection('materials'),
 }
 
-// 类型安全的文档操作
+// 型安全なドキュメント操作
 export async function getDocument<T>(
   collection: FirebaseFirestore.CollectionReference,
   id: string
@@ -845,9 +845,9 @@ export async function updateDocument<T extends Record<string, unknown>>(
 
 ---
 
-## 7. 安全规范
+## 7. セキュリティ規約
 
-### 7.1 认证中间件
+### 7.1 認証ミドルウェア
 
 ```typescript
 // lib/auth/middleware.ts
@@ -862,7 +862,7 @@ export function withAuth(handler: Handler): Handler {
       return NextResponse.json(
         {
           success: false,
-          error: { code: 'UNAUTHORIZED', message: '缺少认证令牌' },
+          error: { code: 'UNAUTHORIZED', message: '認証トークンがありません' },
         },
         { status: 401 }
       )
@@ -872,14 +872,14 @@ export function withAuth(handler: Handler): Handler {
 
     try {
       const payload = await verifyToken(token)
-      // 将用户信息添加到请求中
+      // ユーザー情報をリクエストに追加
       ;(request as any).user = payload
       return handler(request, context)
     } catch (error) {
       return NextResponse.json(
         {
           success: false,
-          error: { code: 'INVALID_TOKEN', message: '无效的认证令牌' },
+          error: { code: 'INVALID_TOKEN', message: '無効な認証トークンです' },
         },
         { status: 401 }
       )
@@ -888,7 +888,7 @@ export function withAuth(handler: Handler): Handler {
 }
 ```
 
-### 7.2 速率限制
+### 7.2 レート制限
 
 ```typescript
 // lib/utils/rate-limit.ts
@@ -900,23 +900,23 @@ const redis = new Redis({
   token: process.env.UPSTASH_REDIS_TOKEN!,
 })
 
-// 创建不同的限制器
+// 異なるリミッターを作成
 export const rateLimiters = {
-  // API 通用限制：每分钟 60 次
+  // API 汎用制限：1分あたり60回
   api: new Ratelimit({
     redis,
     limiter: Ratelimit.slidingWindow(60, '1 m'),
     prefix: 'ratelimit:api',
   }),
 
-  // AI 请求限制：每分钟 10 次
+  // AI リクエスト制限：1分あたり10回
   ai: new Ratelimit({
     redis,
     limiter: Ratelimit.slidingWindow(10, '1 m'),
     prefix: 'ratelimit:ai',
   }),
 
-  // 语音请求限制：每分钟 20 次
+  // 音声リクエスト制限：1分あたり20回
   speech: new Ratelimit({
     redis,
     limiter: Ratelimit.slidingWindow(20, '1 m'),
@@ -936,7 +936,7 @@ export async function checkRateLimit(
 }
 ```
 
-### 7.3 输入清理
+### 7.3 入力サニタイズ
 
 ```typescript
 // lib/utils/sanitize.ts
@@ -951,20 +951,20 @@ export function sanitizeHtml(dirty: string): string {
 
 export function sanitizeText(text: string): string {
   return text
-    .replace(/[<>]/g, '') // 移除 HTML 标签字符
+    .replace(/[<>]/g, '') // HTML タグ文字を削除
     .trim()
 }
 
-// SQL/NoSQL 注入防护已由 Firestore SDK 处理
-// 但仍需验证用户输入
+// SQL/NoSQL インジェクション対策は Firestore SDK で処理されます
+// ただし、ユーザー入力のバリデーションは必要です
 export function validateInput(input: unknown): boolean {
   if (typeof input !== 'string') return false
-  if (input.length > 10000) return false // 限制长度
+  if (input.length > 10000) return false // 長さを制限
   return true
 }
 ```
 
-### 7.4 CORS 配置
+### 7.4 CORS 設定
 
 ```typescript
 // middleware.ts
@@ -983,7 +983,7 @@ if (process.env.NODE_ENV === 'development') {
 export function middleware(request: NextRequest) {
   const origin = request.headers.get('origin')
 
-  // 只处理 API 路由
+  // API ルートのみを処理
   if (request.nextUrl.pathname.startsWith('/api/')) {
     const response = NextResponse.next()
 
@@ -1013,11 +1013,11 @@ export const config = {
 
 ---
 
-## 8. 国际化 (i18n)
+## 8. 国際化 (i18n)
 
-API 层需要支持多语言错误消息和响应内容。支持的语言：简体中文（zh）、日语（ja）、英语（en）。
+API 層では多言語エラーメッセージとレスポンスコンテンツをサポートする必要があります。サポート言語：簡体字中国語（zh）、日本語（ja）、英語（en）。
 
-### 8.1 语言检测
+### 8.1 言語検出
 
 ```typescript
 // lib/i18n/api.ts
@@ -1028,17 +1028,17 @@ export const defaultLocale: SupportedLocale = 'zh'
 export const supportedLocales: SupportedLocale[] = ['zh', 'ja', 'en']
 
 /**
- * 从请求中检测语言
- * 优先级：URL 参数 > Accept-Language 头 > 默认语言
+ * リクエストから言語を検出します
+ * 優先順位：URL パラメータ > Accept-Language ヘッダー > デフォルト言語
  */
 export function detectLocale(request: NextRequest): SupportedLocale {
-  // 1. 检查 URL 参数
+  // 1. URL パラメータをチェック
   const localeParam = request.nextUrl.searchParams.get('locale')
   if (localeParam && supportedLocales.includes(localeParam as SupportedLocale)) {
     return localeParam as SupportedLocale
   }
 
-  // 2. 检查 Accept-Language 头
+  // 2. Accept-Language ヘッダーをチェック
   const acceptLanguage = request.headers.get('accept-language')
   if (acceptLanguage) {
     const languages = acceptLanguage
@@ -1046,11 +1046,11 @@ export function detectLocale(request: NextRequest): SupportedLocale {
       .map((lang) => lang.split(';')[0].trim().toLowerCase())
 
     for (const lang of languages) {
-      // 完整匹配
+      // 完全一致
       if (supportedLocales.includes(lang as SupportedLocale)) {
         return lang as SupportedLocale
       }
-      // 语言代码匹配（如 zh-CN -> zh）
+      // 言語コードマッチ（例：zh-CN -> zh）
       const shortLang = lang.split('-')[0]
       if (supportedLocales.includes(shortLang as SupportedLocale)) {
         return shortLang as SupportedLocale
@@ -1058,20 +1058,20 @@ export function detectLocale(request: NextRequest): SupportedLocale {
     }
   }
 
-  // 3. 返回默认语言
+  // 3. デフォルト言語を返却
   return defaultLocale
 }
 ```
 
-### 8.2 多语言错误消息
+### 8.2 多言語エラーメッセージ
 
 ```typescript
 // lib/i18n/messages.ts
 import type { SupportedLocale } from './api'
 
-// 错误消息定义
+// エラーメッセージ定義
 export const errorMessages: Record<string, Record<SupportedLocale, string>> = {
-  // 认证错误
+  // 認証エラー
   UNAUTHORIZED: {
     zh: '请先登录',
     ja: 'ログインしてください',
@@ -1088,14 +1088,14 @@ export const errorMessages: Record<string, Record<SupportedLocale, string>> = {
     en: 'Authentication token has expired',
   },
 
-  // 权限错误
+  // 権限エラー
   FORBIDDEN: {
     zh: '无权访问此资源',
     ja: 'このリソースにアクセスする権限がありません',
     en: 'You do not have permission to access this resource',
   },
 
-  // 资源错误
+  // リソースエラー
   NOT_FOUND: {
     zh: '资源不存在',
     ja: 'リソースが見つかりません',
@@ -1112,7 +1112,7 @@ export const errorMessages: Record<string, Record<SupportedLocale, string>> = {
     en: 'User not found',
   },
 
-  // 验证错误
+  // バリデーションエラー
   VALIDATION_ERROR: {
     zh: '请求参数无效',
     ja: 'リクエストパラメータが無効です',
@@ -1134,7 +1134,7 @@ export const errorMessages: Record<string, Record<SupportedLocale, string>> = {
     en: 'Message is too long',
   },
 
-  // 业务错误
+  // ビジネスエラー
   CONVERSATION_ENDED: {
     zh: '会话已结束',
     ja: '会話は既に終了しています',
@@ -1146,14 +1146,14 @@ export const errorMessages: Record<string, Record<SupportedLocale, string>> = {
     en: 'Daily practice limit exceeded',
   },
 
-  // 速率限制
+  // レート制限
   RATE_LIMIT_EXCEEDED: {
     zh: '请求过于频繁，请稍后再试',
     ja: 'リクエストが多すぎます。しばらくしてからもう一度お試しください',
     en: 'Too many requests, please try again later',
   },
 
-  // 服务器错误
+  // サーバーエラー
   INTERNAL_ERROR: {
     zh: '服务器内部错误',
     ja: 'サーバー内部エラーが発生しました',
@@ -1172,14 +1172,14 @@ export const errorMessages: Record<string, Record<SupportedLocale, string>> = {
 }
 
 /**
- * 获取本地化的错误消息
+ * ローカライズされたエラーメッセージを取得します
  */
 export function getErrorMessage(code: string, locale: SupportedLocale): string {
   return errorMessages[code]?.[locale] ?? errorMessages['INTERNAL_ERROR'][locale]
 }
 ```
 
-### 8.3 多语言错误类
+### 8.3 多言語エラークラス
 
 ```typescript
 // lib/errors.ts
@@ -1197,14 +1197,14 @@ export class AppError extends Error {
   }
 
   /**
-   * 获取本地化的错误消息
+   * ローカライズされたエラーメッセージを取得します
    */
   getLocalizedMessage(locale: SupportedLocale): string {
     return getErrorMessage(this.code, locale)
   }
 
   /**
-   * 转换为 API 响应格式
+   * API レスポンス形式に変換します
    */
   toResponse(locale: SupportedLocale) {
     return {
@@ -1218,7 +1218,7 @@ export class AppError extends Error {
   }
 }
 
-// 预定义错误
+// 事前定義エラー
 export class UnauthorizedError extends AppError {
   constructor() {
     super('UNAUTHORIZED', 401)
@@ -1245,7 +1245,7 @@ export class RateLimitError extends AppError {
 }
 ```
 
-### 8.4 带语言支持的错误处理中间件
+### 8.4 言語サポート付きエラーハンドリングミドルウェア
 
 ```typescript
 // lib/utils/api-handler.ts
@@ -1274,7 +1274,7 @@ export function withErrorHandler(handler: Handler): Handler {
         })
       }
 
-      // 未知错误
+      // 未知のエラー
       return NextResponse.json(
         {
           success: false,
@@ -1290,7 +1290,7 @@ export function withErrorHandler(handler: Handler): Handler {
 }
 ```
 
-### 8.5 API 响应中包含语言信息
+### 8.5 API レスポンスに言語情報を含める
 
 ```typescript
 // lib/utils/response.ts
@@ -1329,7 +1329,7 @@ export function createApiResponse<T>({
 }
 ```
 
-### 8.6 完整 API 示例
+### 8.6 完全な API サンプル
 
 ```typescript
 // app/api/conversation/route.ts
@@ -1350,13 +1350,13 @@ const CreateConversationSchema = z.object({
 export const POST = withErrorHandler(async (request: NextRequest) => {
   const locale = detectLocale(request)
 
-  // 认证检查
+  // 認証チェック
   const session = await getServerSession()
   if (!session) {
     throw new UnauthorizedError()
   }
 
-  // 验证请求体
+  // リクエストボディをバリデーション
   const body = await request.json()
   const result = CreateConversationSchema.safeParse(body)
 
@@ -1366,7 +1366,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
     })
   }
 
-  // 创建会话
+  // 会話を作成
   const conversation = await createConversation({
     userId: session.userId,
     ...result.data,
@@ -1380,13 +1380,13 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
 })
 ```
 
-### 8.7 AI 生成内容的多语言处理
+### 8.7 AI 生成コンテンツの多言語処理
 
 ```typescript
 // lib/services/gemini.ts
 import type { SupportedLocale } from '@/lib/i18n/api'
 
-// 根据用户界面语言生成 AI 指导语言
+// ユーザーインターフェース言語に基づいて AI 指導言語を生成
 const instructionLanguageMap: Record<SupportedLocale, string> = {
   zh: '用中文回复用户（教学指导部分），日语对话部分保持日语',
   ja: '日本語で返信してください',
@@ -1401,25 +1401,25 @@ export function buildSystemPrompt(
   const languageInstruction = instructionLanguageMap[uiLocale]
 
   return `
-你是一个日语学习助手，正在进行「${scenario}」场景的对话练习。
-难度级别：${difficulty}/5
+あなたは日本語学習アシスタントで、「${scenario}」シーンの会話練習を行っています。
+難易度レベル：${difficulty}/5
 
-【语言规则】
-- 角色扮演对话：始终使用日语
-- 教学提示和解释：${languageInstruction}
-- 错误纠正：使用用户的界面语言解释
+【言語ルール】
+- ロールプレイ会話：常に日本語を使用
+- 教育的なヒントと説明：${languageInstruction}
+- 間違いの訂正：ユーザーのインターフェース言語で説明
 
-【回复格式】
+【返信形式】
 {
-  "dialogue": "日语对话内容",
-  "hint": "教学提示（使用界面语言）",
-  "correction": "如有错误，在此纠正（使用界面语言）"
+  "dialogue": "日本語の会話内容",
+  "hint": "教育的なヒント（インターフェース言語を使用）",
+  "correction": "間違いがあれば、ここで訂正（インターフェース言語を使用）"
 }
 `
 }
 ```
 
-### 8.8 学习分析报告的多语言生成
+### 8.8 学習分析レポートの多言語生成
 
 ```typescript
 // lib/services/analysis.ts
@@ -1485,9 +1485,9 @@ export async function generateAnalysisReport(
 
 ---
 
-## 9. 测试规范
+## 9. テスト規約
 
-### 8.1 API 路由测试
+### 9.1 API ルートテスト
 
 ```typescript
 // tests/api/conversation.test.ts
@@ -1551,7 +1551,7 @@ describe('POST /api/conversation', () => {
 })
 ```
 
-### 8.2 Server Action 测试
+### 9.2 Server Action テスト
 
 ```typescript
 // tests/actions/conversation.test.ts
@@ -1582,7 +1582,7 @@ describe('sendMessage', () => {
 })
 ```
 
-### 8.3 集成测试
+### 9.3 統合テスト
 
 ```typescript
 // tests/integration/conversation-flow.test.ts
@@ -1592,7 +1592,7 @@ describe('Conversation Flow Integration', () => {
   let sessionId: string
 
   beforeAll(async () => {
-    // 创建测试会话
+    // テスト会話を作成
     const response = await fetch('http://localhost:3000/api/conversation', {
       method: 'POST',
       headers: {
@@ -1607,7 +1607,7 @@ describe('Conversation Flow Integration', () => {
   })
 
   afterAll(async () => {
-    // 清理测试数据
+    // テストデータをクリーンアップ
     await fetch(`http://localhost:3000/api/conversation/${sessionId}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${TEST_TOKEN}` },
@@ -1615,7 +1615,7 @@ describe('Conversation Flow Integration', () => {
   })
 
   it('completes a full conversation flow', async () => {
-    // 1. 发送消息
+    // 1. メッセージを送信
     const messageResponse = await fetch(
       `http://localhost:3000/api/conversation/${sessionId}/message`,
       {
@@ -1630,7 +1630,7 @@ describe('Conversation Flow Integration', () => {
 
     expect(messageResponse.ok).toBe(true)
 
-    // 2. 获取会话状态
+    // 2. 会話ステータスを取得
     const sessionResponse = await fetch(
       `http://localhost:3000/api/conversation/${sessionId}`,
       {
@@ -1641,7 +1641,7 @@ describe('Conversation Flow Integration', () => {
     const sessionData = await sessionResponse.json()
     expect(sessionData.data.messages.length).toBeGreaterThan(0)
 
-    // 3. 生成分析
+    // 3. 分析を生成
     const analysisResponse = await fetch(
       `http://localhost:3000/api/analysis/${sessionId}`,
       {
@@ -1657,8 +1657,8 @@ describe('Conversation Flow Integration', () => {
 
 ---
 
-## 相关文档
+## 関連ドキュメント
 
-- [技术栈文档](./TECH_STACK.md)
-- [前端开发规范](./FRONTEND_GUIDELINES.md)
-- [项目通用规范](./PROJECT_GUIDELINES.md)
+- [技術スタックドキュメント](./TECH_STACK.md)
+- [フロントエンド開発ガイドライン](./FRONTEND_GUIDELINES.md)
+- [プロジェクト共通ガイドライン](./PROJECT_GUIDELINES.md)

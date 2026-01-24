@@ -1,95 +1,95 @@
-# 前端开发规范
+# フロントエンド開発ガイドライン
 
-> 最后更新: 2026-01-17
+> 最終更新: 2026-01-17
 
-## 目录
+## 目次
 
-1. [项目结构](#1-项目结构)
-2. [组件规范](#2-组件规范)
-3. [样式规范](#3-样式规范)
-4. [状态管理](#4-状态管理)
-5. [类型定义](#5-类型定义)
-6. [性能优化](#6-性能优化)
-7. [国际化 (i18n)](#7-国际化-i18n)
-8. [无障碍访问](#8-无障碍访问)
-9. [测试规范](#9-测试规范)
+1. [プロジェクト構造](#1-プロジェクト構造)
+2. [コンポーネント規約](#2-コンポーネント規約)
+3. [スタイル規約](#3-スタイル規約)
+4. [状態管理](#4-状態管理)
+5. [型定義](#5-型定義)
+6. [パフォーマンス最適化](#6-パフォーマンス最適化)
+7. [国際化 (i18n)](#7-国際化-i18n)
+8. [アクセシビリティ](#8-アクセシビリティ)
+9. [テスト規約](#9-テスト規約)
 
 ---
 
-## 1. 项目结构
+## 1. プロジェクト構造
 
-### 1.1 目录组织
+### 1.1 ディレクトリ構成
 
 ```
 src/
-├── app/                    # Next.js App Router 页面
-├── components/             # React 组件
-│   ├── ui/                 # shadcn/ui 基础组件
-│   ├── features/           # 功能组件（按功能域划分）
-│   └── layouts/            # 布局组件
-├── hooks/                  # 自定义 Hooks
+├── app/                    # Next.js App Router ページ
+├── components/             # React コンポーネント
+│   ├── ui/                 # shadcn/ui 基本コンポーネント
+│   ├── features/           # 機能コンポーネント（機能ドメイン別）
+│   └── layouts/            # レイアウトコンポーネント
+├── hooks/                  # カスタム Hooks
 ├── stores/                 # Zustand Stores
-├── lib/                    # 工具库
-├── types/                  # TypeScript 类型定义
-└── styles/                 # 全局样式
+├── lib/                    # ユーティリティライブラリ
+├── types/                  # TypeScript 型定義
+└── styles/                 # グローバルスタイル
 ```
 
-### 1.2 文件命名规范
+### 1.2 ファイル命名規約
 
-| 类型 | 命名规范 | 示例 |
+| 種類 | 命名規約 | 例 |
 |------|----------|------|
-| 组件文件 | kebab-case | `conversation-panel.tsx` |
-| 组件导出名 | PascalCase | `ConversationPanel` |
-| Hook 文件 | kebab-case，use- 前缀 | `use-conversation.ts` |
-| Store 文件 | kebab-case，-store 后缀 | `conversation-store.ts` |
-| 类型文件 | kebab-case | `conversation.ts` |
-| 工具函数 | kebab-case | `format-date.ts` |
+| コンポーネントファイル | kebab-case | `conversation-panel.tsx` |
+| コンポーネントエクスポート名 | PascalCase | `ConversationPanel` |
+| Hook ファイル | kebab-case、use- プレフィックス | `use-conversation.ts` |
+| Store ファイル | kebab-case、-store サフィックス | `conversation-store.ts` |
+| 型ファイル | kebab-case | `conversation.ts` |
+| ユーティリティ関数 | kebab-case | `format-date.ts` |
 
-### 1.3 导入顺序
+### 1.3 インポート順序
 
 ```typescript
-// 1. React 和 Next.js
+// 1. React と Next.js
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
-// 2. 第三方库
+// 2. サードパーティライブラリ
 import { motion } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
 
-// 3. 内部组件
+// 3. 内部コンポーネント
 import { Button } from '@/components/ui/button'
 import { ConversationPanel } from '@/components/features/conversation'
 
-// 4. Hooks 和 Stores
+// 4. Hooks と Stores
 import { useConversation } from '@/hooks/use-conversation'
 import { useUserStore } from '@/stores/user-store'
 
-// 5. 工具函数和常量
+// 5. ユーティリティ関数と定数
 import { formatDate } from '@/lib/utils/format-date'
 import { SCENARIOS } from '@/lib/constants'
 
-// 6. 类型
+// 6. 型
 import type { Conversation } from '@/types/conversation'
 
-// 7. 样式（仅在需要时）
+// 7. スタイル（必要な場合のみ）
 import styles from './component.module.css'
 ```
 
 ---
 
-## 2. 组件规范
+## 2. コンポーネント規約
 
-### 2.1 组件类型选择
+### 2.1 コンポーネントタイプの選択
 
 ```typescript
-// Server Component（默认）- 用于数据获取和静态内容
+// Server Component（デフォルト）- データ取得と静的コンテンツ用
 // app/dashboard/page.tsx
 export default async function DashboardPage() {
   const data = await fetchDashboardData()
   return <Dashboard data={data} />
 }
 
-// Client Component - 用于交互和浏览器 API
+// Client Component - インタラクションとブラウザ API 用
 // components/features/conversation/conversation-input.tsx
 'use client'
 
@@ -101,29 +101,29 @@ export function ConversationInput() {
 }
 ```
 
-### 2.2 组件结构模板
+### 2.2 コンポーネント構造テンプレート
 
 ```typescript
-'use client' // 仅在需要时添加
+'use client' // 必要な場合のみ追加
 
 import { useState, useCallback } from 'react'
 import { cn } from '@/lib/utils'
 import type { ComponentProps } from './types'
 
 interface ConversationPanelProps {
-  /** 场景类型 */
+  /** シナリオタイプ */
   scenario: string
-  /** 初始难度 */
+  /** 初期難易度 */
   initialDifficulty?: number
-  /** 对话结束回调 */
+  /** 会話終了コールバック */
   onComplete?: (sessionId: string) => void
-  /** 自定义类名 */
+  /** カスタムクラス名 */
   className?: string
 }
 
 /**
- * 对话面板组件
- * 用于展示和管理日语对话练习
+ * 会話パネルコンポーネント
+ * 日本語会話練習の表示と管理に使用します
  */
 export function ConversationPanel({
   scenario,
@@ -131,58 +131,58 @@ export function ConversationPanel({
   onComplete,
   className,
 }: ConversationPanelProps) {
-  // 1. Hooks（状态、副作用等）
+  // 1. Hooks（状態、副作用など）
   const [messages, setMessages] = useState<Message[]>([])
 
-  // 2. 派生状态
+  // 2. 派生状態
   const isActive = messages.length > 0
 
-  // 3. 事件处理函数
+  // 3. イベントハンドラー関数
   const handleSendMessage = useCallback(async (content: string) => {
-    // 处理逻辑
+    // 処理ロジック
   }, [])
 
-  // 4. 渲染
+  // 4. レンダリング
   return (
     <div className={cn('flex flex-col gap-4', className)}>
-      {/* 组件内容 */}
+      {/* コンポーネントコンテンツ */}
     </div>
   )
 }
 ```
 
-### 2.3 Props 规范
+### 2.3 Props 規約
 
 ```typescript
-// 使用 interface 定义 Props
+// interface を使用して Props を定義
 interface ButtonProps {
-  /** 按钮变体 */
+  /** ボタンバリアント */
   variant?: 'default' | 'destructive' | 'outline' | 'ghost'
-  /** 按钮大小 */
+  /** ボタンサイズ */
   size?: 'sm' | 'md' | 'lg'
-  /** 是否禁用 */
+  /** 無効化するかどうか */
   disabled?: boolean
-  /** 是否显示加载状态 */
+  /** ローディング状態を表示するかどうか */
   loading?: boolean
-  /** 子元素 */
+  /** 子要素 */
   children: React.ReactNode
-  /** 点击事件 */
+  /** クリックイベント */
   onClick?: () => void
 }
 
-// 扩展原生元素 Props
+// ネイティブ要素の Props を拡張
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string
   error?: string
 }
 
-// 使用 ComponentPropsWithoutRef 避免 ref 冲突
+// ComponentPropsWithoutRef を使用して ref の競合を回避
 interface CardProps extends React.ComponentPropsWithoutRef<'div'> {
   variant?: 'default' | 'bordered'
 }
 ```
 
-### 2.4 组件导出
+### 2.4 コンポーネントエクスポート
 
 ```typescript
 // components/features/conversation/index.ts
@@ -190,32 +190,32 @@ export { ConversationPanel } from './conversation-panel'
 export { ConversationMessage } from './conversation-message'
 export { ConversationInput } from './conversation-input'
 
-// 类型也一并导出
+// 型も一緒にエクスポート
 export type { ConversationPanelProps } from './conversation-panel'
 ```
 
 ---
 
-## 3. 样式规范
+## 3. スタイル規約
 
-### 3.1 Tailwind CSS 使用规范
+### 3.1 Tailwind CSS 使用規約
 
 ```typescript
-// 使用 cn() 合并类名
+// cn() を使用してクラス名をマージ
 import { cn } from '@/lib/utils'
 
 function Button({ className, variant }: ButtonProps) {
   return (
     <button
       className={cn(
-        // 基础样式
+        // 基本スタイル
         'inline-flex items-center justify-center rounded-md',
         'text-sm font-medium transition-colors',
         'focus-visible:outline-none focus-visible:ring-2',
-        // 变体样式
+        // バリアントスタイル
         variant === 'default' && 'bg-primary text-primary-foreground',
         variant === 'outline' && 'border border-input bg-background',
-        // 外部传入的类名
+        // 外部から渡されたクラス名
         className
       )}
     >
@@ -225,41 +225,41 @@ function Button({ className, variant }: ButtonProps) {
 }
 ```
 
-### 3.2 响应式设计
+### 3.2 レスポンシブデザイン
 
 ```typescript
-// 移动优先设计
+// モバイルファーストデザイン
 <div className="
-  flex flex-col          // 移动端：纵向排列
-  md:flex-row            // 平板及以上：横向排列
-  lg:gap-8               // 大屏：更大间距
+  flex flex-col          // モバイル：縦方向配置
+  md:flex-row            // タブレット以上：横方向配置
+  lg:gap-8               // 大画面：より大きな間隔
 ">
   <aside className="
-    w-full               // 移动端：全宽
-    md:w-64              // 平板：固定宽度
-    lg:w-80              // 大屏：更宽
+    w-full               // モバイル：全幅
+    md:w-64              // タブレット：固定幅
+    lg:w-80              // 大画面：より広く
   ">
-    {/* 侧边栏 */}
+    {/* サイドバー */}
   </aside>
   <main className="flex-1">
-    {/* 主内容 */}
+    {/* メインコンテンツ */}
   </main>
 </div>
 ```
 
-### 3.3 暗色模式
+### 3.3 ダークモード
 
 ```typescript
-// 使用 Tailwind 的 dark: 前缀
+// Tailwind の dark: プレフィックスを使用
 <div className="
   bg-white dark:bg-gray-900
   text-gray-900 dark:text-gray-100
   border-gray-200 dark:border-gray-800
 ">
-  {/* 内容 */}
+  {/* コンテンツ */}
 </div>
 
-// 主题切换 Hook
+// テーマ切り替え Hook
 import { useTheme } from 'next-themes'
 
 function ThemeToggle() {
@@ -267,16 +267,16 @@ function ThemeToggle() {
 
   return (
     <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
-      切换主题
+      テーマを切り替える
     </button>
   )
 }
 ```
 
-### 3.4 动画规范
+### 3.4 アニメーション規約
 
 ```typescript
-// 使用 Framer Motion
+// Framer Motion を使用
 import { motion } from 'framer-motion'
 
 function MessageBubble({ message }: { message: Message }) {
@@ -293,16 +293,16 @@ function MessageBubble({ message }: { message: Message }) {
   )
 }
 
-// 使用 Tailwind 内置动画（简单场景）
+// Tailwind 組み込みアニメーション（シンプルな場面用）
 <div className="animate-pulse bg-gray-200 rounded" />
 <div className="animate-spin h-4 w-4 border-2 border-primary" />
 ```
 
 ---
 
-## 4. 状态管理
+## 4. 状態管理
 
-### 4.1 Zustand Store 规范
+### 4.1 Zustand Store 規約
 
 ```typescript
 // stores/conversation-store.ts
@@ -311,12 +311,12 @@ import { devtools, persist } from 'zustand/middleware'
 import type { Message, ConversationSession } from '@/types/conversation'
 
 interface ConversationState {
-  // 状态
+  // 状態
   currentSession: ConversationSession | null
   messages: Message[]
   isLoading: boolean
 
-  // 计算属性（使用 getter）
+  // 計算プロパティ（getter を使用）
   messageCount: number
 
   // 操作
@@ -366,7 +366,7 @@ export const useConversationStore = create<ConversationState>()(
 
           set({ isLoading: true })
           try {
-            // 保存会话到服务器
+            // セッションをサーバーに保存
             await saveSession(currentSession, messages)
             set(initialState)
           } finally {
@@ -379,7 +379,7 @@ export const useConversationStore = create<ConversationState>()(
       {
         name: 'conversation-storage',
         partialize: (state) => ({
-          // 只持久化必要的状态
+          // 必要な状態のみを永続化
           currentSession: state.currentSession,
           messages: state.messages,
         }),
@@ -390,20 +390,20 @@ export const useConversationStore = create<ConversationState>()(
 )
 ```
 
-### 4.2 Store 选择器优化
+### 4.2 Store セレクター最適化
 
 ```typescript
-// 使用选择器避免不必要的重渲染
+// セレクターを使用して不要な再レンダリングを回避
 import { useShallow } from 'zustand/shallow'
 
-// 不推荐：获取整个 store
+// 非推奨：store 全体を取得
 const { messages, addMessage } = useConversationStore()
 
-// 推荐：使用选择器
+// 推奨：セレクターを使用
 const messages = useConversationStore((state) => state.messages)
 const addMessage = useConversationStore((state) => state.addMessage)
 
-// 推荐：多个值使用 useShallow
+// 推奨：複数の値には useShallow を使用
 const { messages, isLoading } = useConversationStore(
   useShallow((state) => ({
     messages: state.messages,
@@ -412,7 +412,7 @@ const { messages, isLoading } = useConversationStore(
 )
 ```
 
-### 4.3 TanStack Query 使用
+### 4.3 TanStack Query の使用
 
 ```typescript
 // hooks/use-user-profile.ts
@@ -422,7 +422,7 @@ export function useUserProfile(userId: string) {
   return useQuery({
     queryKey: ['user', userId],
     queryFn: () => fetchUserProfile(userId),
-    staleTime: 5 * 60 * 1000, // 5 分钟
+    staleTime: 5 * 60 * 1000, // 5 分
   })
 }
 
@@ -432,13 +432,13 @@ export function useUpdateProfile() {
   return useMutation({
     mutationFn: updateUserProfile,
     onSuccess: (data, variables) => {
-      // 更新缓存
+      // キャッシュを更新
       queryClient.setQueryData(['user', variables.userId], data)
     },
   })
 }
 
-// 在组件中使用
+// コンポーネントで使用
 function ProfilePage() {
   const { data: profile, isLoading, error } = useUserProfile('user-123')
   const updateProfile = useUpdateProfile()
@@ -457,9 +457,9 @@ function ProfilePage() {
 
 ---
 
-## 5. 类型定义
+## 5. 型定義
 
-### 5.1 类型文件组织
+### 5.1 型ファイルの構成
 
 ```typescript
 // types/conversation.ts
@@ -500,7 +500,7 @@ export interface SessionAnalysis {
 }
 ```
 
-### 5.2 API 响应类型
+### 5.2 API レスポンス型
 
 ```typescript
 // types/api.ts
@@ -524,31 +524,31 @@ export interface PaginatedResponse<T> {
   hasMore: boolean
 }
 
-// 使用泛型约束 API 函数
+// ジェネリクスで API 関数を制約
 async function fetchApi<T>(url: string): Promise<ApiResponse<T>> {
   const response = await fetch(url)
   return response.json()
 }
 ```
 
-### 5.3 组件 Props 类型
+### 5.3 コンポーネント Props 型
 
 ```typescript
 // types/components.ts
 import type { ReactNode } from 'react'
 
-// 通用 Props 类型
+// 共通 Props 型
 export interface BaseProps {
   className?: string
   children?: ReactNode
 }
 
-// 带有 testId 的 Props
+// testId 付き Props
 export interface TestableProps {
   'data-testid'?: string
 }
 
-// 组合使用
+// 組み合わせて使用
 interface MyComponentProps extends BaseProps, TestableProps {
   title: string
   onAction?: () => void
@@ -557,12 +557,12 @@ interface MyComponentProps extends BaseProps, TestableProps {
 
 ---
 
-## 6. 性能优化
+## 6. パフォーマンス最適化
 
-### 6.1 组件优化
+### 6.1 コンポーネント最適化
 
 ```typescript
-// 使用 React.memo 避免不必要的重渲染
+// React.memo を使用して不要な再レンダリングを回避
 import { memo } from 'react'
 
 export const MessageBubble = memo(function MessageBubble({
@@ -573,24 +573,24 @@ export const MessageBubble = memo(function MessageBubble({
   return <div>{message.content}</div>
 })
 
-// 使用 useMemo 缓存计算结果
+// useMemo を使用して計算結果をキャッシュ
 const sortedMessages = useMemo(
   () => messages.sort((a, b) => a.timestamp - b.timestamp),
   [messages]
 )
 
-// 使用 useCallback 缓存函数引用
+// useCallback を使用して関数参照をキャッシュ
 const handleSubmit = useCallback(async (data: FormData) => {
   await submitForm(data)
 }, [])
 ```
 
-### 6.2 图片优化
+### 6.2 画像最適化
 
 ```typescript
 import Image from 'next/image'
 
-// 使用 Next.js Image 组件
+// Next.js Image コンポーネントを使用
 function Avatar({ src, alt }: { src: string; alt: string }) {
   return (
     <Image
@@ -605,7 +605,7 @@ function Avatar({ src, alt }: { src: string; alt: string }) {
   )
 }
 
-// 响应式图片
+// レスポンシブ画像
 function HeroImage() {
   return (
     <Image
@@ -613,30 +613,30 @@ function HeroImage() {
       alt="Hero"
       fill
       sizes="(max-width: 768px) 100vw, 50vw"
-      priority // 首屏图片使用 priority
+      priority // ファーストビュー画像には priority を使用
     />
   )
 }
 ```
 
-### 6.3 代码分割
+### 6.3 コード分割
 
 ```typescript
 import dynamic from 'next/dynamic'
 
-// 动态导入大型组件
+// 大きなコンポーネントを動的インポート
 const Chart = dynamic(() => import('@/components/chart'), {
   loading: () => <Skeleton className="h-64" />,
-  ssr: false, // 禁用服务端渲染
+  ssr: false, // サーバーサイドレンダリングを無効化
 })
 
-// 动态导入带命名导出的组件
+// 名前付きエクスポートを持つコンポーネントを動的インポート
 const Dialog = dynamic(
   () => import('@/components/ui/dialog').then((mod) => mod.Dialog)
 )
 ```
 
-### 6.4 列表虚拟化
+### 6.4 リスト仮想化
 
 ```typescript
 import { useVirtualizer } from '@tanstack/react-virtual'
@@ -680,30 +680,30 @@ function MessageList({ messages }: { messages: Message[] }) {
 
 ---
 
-## 7. 国际化 (i18n)
+## 7. 国際化 (i18n)
 
-本项目支持三种语言：简体中文（zh）、日语（ja）、英语（en）。使用 `next-intl` 作为国际化解决方案。
+本プロジェクトは3つの言語をサポートしています：簡体字中国語（zh）、日本語（ja）、英語（en）。国際化ソリューションとして `next-intl` を使用しています。
 
-### 7.1 目录结构
+### 7.1 ディレクトリ構造
 
 ```
 src/
 ├── i18n/
-│   ├── config.ts              # i18n 配置
-│   ├── request.ts             # 服务端请求配置
-│   └── routing.ts             # 路由配置
+│   ├── config.ts              # i18n 設定
+│   ├── request.ts             # サーバーサイドリクエスト設定
+│   └── routing.ts             # ルーティング設定
 ├── messages/
-│   ├── zh.json                # 简体中文
-│   ├── ja.json                # 日语
-│   └── en.json                # 英语
+│   ├── zh.json                # 簡体字中国語
+│   ├── ja.json                # 日本語
+│   └── en.json                # 英語
 ├── app/
-│   └── [locale]/              # 语言路由
+│   └── [locale]/              # 言語ルーティング
 │       ├── layout.tsx
 │       ├── page.tsx
 │       └── ...
 ```
 
-### 7.2 配置文件
+### 7.2 設定ファイル
 
 ```typescript
 // src/i18n/config.ts
@@ -718,7 +718,7 @@ export const localeNames: Record<Locale, string> = {
   en: 'English',
 }
 
-// 日语学习相关的界面语言映射
+// 日本語学習に関連するUI言語マッピング
 export const uiLocaleLabels: Record<Locale, Record<Locale, string>> = {
   zh: { zh: '简体中文', ja: '日本語', en: 'English' },
   ja: { zh: '中国語（簡体字）', ja: '日本語', en: '英語' },
@@ -754,14 +754,14 @@ import { locales, defaultLocale } from './config'
 export const routing = defineRouting({
   locales,
   defaultLocale,
-  localePrefix: 'as-needed', // 默认语言不显示前缀
+  localePrefix: 'as-needed', // デフォルト言語はプレフィックスを表示しない
 })
 
 export const { Link, redirect, usePathname, useRouter } =
   createNavigation(routing)
 ```
 
-### 7.3 翻译文件结构
+### 7.3 翻訳ファイル構造
 
 ```json
 // messages/zh.json
@@ -928,7 +928,7 @@ export const { Link, redirect, usePathname, useRouter } =
 }
 ```
 
-### 7.4 在组件中使用
+### 7.4 コンポーネントでの使用
 
 ```typescript
 // Server Component
@@ -963,17 +963,17 @@ export function PracticeButton() {
 ```
 
 ```typescript
-// 带参数的翻译
+// パラメータ付き翻訳
 // messages/zh.json: "greeting": "你好，{name}！"
 const t = useTranslations('common')
 t('greeting', { name: '张三' }) // "你好，张三！"
 
-// 复数形式
+// 複数形
 // messages/zh.json: "messages": "{count, plural, =0 {没有消息} =1 {1 条消息} other {# 条消息}}"
 t('messages', { count: 5 }) // "5 条消息"
 ```
 
-### 7.5 语言切换组件
+### 7.5 言語切り替えコンポーネント
 
 ```typescript
 'use client'
@@ -1008,7 +1008,7 @@ export function LocaleSwitcher() {
 }
 ```
 
-### 7.6 日期和数字格式化
+### 7.6 日付と数値のフォーマット
 
 ```typescript
 import { useFormatter } from 'next-intl'
@@ -1016,7 +1016,7 @@ import { useFormatter } from 'next-intl'
 function FormattedContent() {
   const format = useFormatter()
 
-  // 日期格式化
+  // 日付フォーマット
   const date = new Date()
   format.dateTime(date, {
     year: 'numeric',
@@ -1027,28 +1027,28 @@ function FormattedContent() {
   // ja: "2026年1月17日"
   // en: "January 17, 2026"
 
-  // 相对时间
+  // 相対時間
   format.relativeTime(date)
   // zh: "3 小时前"
   // ja: "3 時間前"
   // en: "3 hours ago"
 
-  // 数字格式化
+  // 数値フォーマット
   format.number(1234567.89, { style: 'decimal' })
   // zh: "1,234,567.89"
   // ja: "1,234,567.89"
   // en: "1,234,567.89"
 
-  // 百分比
+  // パーセンテージ
   format.number(0.85, { style: 'percent' })
   // zh: "85%"
 }
 ```
 
-### 7.7 类型安全
+### 7.7 型安全性
 
 ```typescript
-// 使用 next-intl 的类型生成
+// next-intl の型生成を使用
 // global.d.ts
 import zh from '@/messages/zh.json'
 
@@ -1059,7 +1059,7 @@ declare global {
 }
 ```
 
-### 7.8 布局配置
+### 7.8 レイアウト設定
 
 ```typescript
 // app/[locale]/layout.tsx
@@ -1109,41 +1109,41 @@ export default async function LocaleLayout({ children, params }: Props) {
 
 ---
 
-## 8. 无障碍访问
+## 8. アクセシビリティ
 
-### 7.1 语义化 HTML
+### 8.1 セマンティック HTML
 
 ```typescript
-// 使用正确的 HTML 元素
+// 正しい HTML 要素を使用
 function Navigation() {
   return (
-    <nav aria-label="主导航">
+    <nav aria-label="メインナビゲーション">
       <ul>
-        <li><a href="/dashboard">仪表板</a></li>
-        <li><a href="/practice">练习</a></li>
+        <li><a href="/dashboard">ダッシュボード</a></li>
+        <li><a href="/practice">練習</a></li>
       </ul>
     </nav>
   )
 }
 
-// 使用 heading 层级
+// heading の階層を使用
 function Page() {
   return (
     <main>
-      <h1>页面标题</h1>
+      <h1>ページタイトル</h1>
       <section>
-        <h2>章节标题</h2>
-        <p>内容...</p>
+        <h2>セクションタイトル</h2>
+        <p>コンテンツ...</p>
       </section>
     </main>
   )
 }
 ```
 
-### 7.2 ARIA 属性
+### 8.2 ARIA 属性
 
 ```typescript
-// 对话框
+// ダイアログ
 function Modal({ isOpen, onClose, title, children }) {
   return (
     <div
@@ -1154,14 +1154,14 @@ function Modal({ isOpen, onClose, title, children }) {
     >
       <h2 id="modal-title">{title}</h2>
       <div id="modal-description">{children}</div>
-      <button onClick={onClose} aria-label="关闭对话框">
+      <button onClick={onClose} aria-label="ダイアログを閉じる">
         <XIcon />
       </button>
     </div>
   )
 }
 
-// 加载状态
+// ローディング状態
 function LoadingButton({ loading, children, ...props }) {
   return (
     <button
@@ -1176,7 +1176,7 @@ function LoadingButton({ loading, children, ...props }) {
 }
 ```
 
-### 7.3 键盘导航
+### 8.3 キーボードナビゲーション
 
 ```typescript
 function Dropdown({ items, onSelect }) {
@@ -1198,7 +1198,7 @@ function Dropdown({ items, onSelect }) {
         onSelect(items[activeIndex])
         break
       case 'Escape':
-        // 关闭下拉框
+        // ドロップダウンを閉じる
         break
     }
   }
@@ -1222,9 +1222,9 @@ function Dropdown({ items, onSelect }) {
 
 ---
 
-## 9. 测试规范
+## 9. テスト規約
 
-### 8.1 单元测试
+### 9.1 ユニットテスト
 
 ```typescript
 // tests/unit/components/button.test.tsx
@@ -1252,7 +1252,7 @@ describe('Button', () => {
 })
 ```
 
-### 8.2 Hook 测试
+### 9.2 Hook テスト
 
 ```typescript
 // tests/unit/hooks/use-conversation.test.ts
@@ -1289,7 +1289,7 @@ describe('useConversationStore', () => {
 })
 ```
 
-### 8.3 E2E 测试
+### 9.3 E2E テスト
 
 ```typescript
 // tests/e2e/conversation.spec.ts
@@ -1301,13 +1301,13 @@ test.describe('Conversation Practice', () => {
   })
 
   test('user can start a conversation', async ({ page }) => {
-    // 选择场景
+    // シナリオを選択
     await page.click('[data-testid="scenario-restaurant"]')
 
-    // 开始对话
+    // 会話を開始
     await page.click('[data-testid="start-conversation"]')
 
-    // 等待 Agent 响应
+    // Agent の応答を待つ
     await expect(page.locator('[data-testid="agent-message"]')).toBeVisible()
   })
 
@@ -1315,11 +1315,11 @@ test.describe('Conversation Practice', () => {
     await page.click('[data-testid="scenario-restaurant"]')
     await page.click('[data-testid="start-conversation"]')
 
-    // 输入消息
+    // メッセージを入力
     await page.fill('[data-testid="message-input"]', 'すみません')
     await page.click('[data-testid="send-button"]')
 
-    // 验证消息显示
+    // メッセージの表示を確認
     await expect(
       page.locator('[data-testid="user-message"]').last()
     ).toContainText('すみません')
@@ -1329,19 +1329,19 @@ test.describe('Conversation Practice', () => {
 
 ---
 
-## 附录：常用工具函数
+## 付録：よく使うユーティリティ関数
 
 ```typescript
 // lib/utils/index.ts
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
-// 合并 Tailwind 类名
+// Tailwind クラス名をマージ
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-// 格式化日期
+// 日付をフォーマット
 export function formatDate(date: Date, locale = 'ja-JP'): string {
   return new Intl.DateTimeFormat(locale, {
     year: 'numeric',
@@ -1350,12 +1350,12 @@ export function formatDate(date: Date, locale = 'ja-JP'): string {
   }).format(date)
 }
 
-// 延迟函数
+// 遅延関数
 export function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-// 生成唯一 ID
+// ユニーク ID を生成
 export function generateId(): string {
   return crypto.randomUUID()
 }
@@ -1363,8 +1363,8 @@ export function generateId(): string {
 
 ---
 
-## 相关文档
+## 関連ドキュメント
 
-- [技术栈文档](./TECH_STACK.md)
-- [API 开发规范](./API_GUIDELINES.md)
-- [项目通用规范](./PROJECT_GUIDELINES.md)
+- [技術スタックドキュメント](./TECH_STACK.md)
+- [API 開発ガイドライン](./API_GUIDELINES.md)
+- [プロジェクト共通ガイドライン](./PROJECT_GUIDELINES.md)

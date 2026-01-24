@@ -7,15 +7,15 @@ import { AppError, successResponse, errorResponse } from '@/lib/api-error'
 import type { ErrorType } from '@/types/analysis'
 
 interface GenerateRequest {
-  // 模式1: 通过 analysisId + errorIndex 获取 error
+  // モード1: analysisId + errorIndex から error を取得
   analysisId?: string
   errorIndex?: number
-  // 模式2: 直接传递 error 详情（用于 local/temp 模式）
+  // モード2: error 詳細を直接渡す（local/temp モード用）
   errorType?: string
   original?: string
   correction?: string
   explanation?: string
-  // 通用参数
+  // 共通パラメータ
   language?: string
 }
 
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     let explanation: string
     let userId = 'anonymous'
 
-    // 模式1: 通过 analysisId 获取 error
+    // モード1: analysisId から error を取得
     if (body.analysisId && typeof body.errorIndex === 'number') {
       const analysis = await getAnalysis(body.analysisId)
       if (!analysis) {
@@ -47,19 +47,19 @@ export async function POST(request: NextRequest) {
       explanation = error.explanation
       userId = analysis.userId
     }
-    // 模式2: 直接传递 error 详情
+    // モード2: error 詳細を直接渡す
     else if (body.errorType && body.original && body.correction) {
       errorType = body.errorType
       original = body.original
       correction = body.correction
       explanation = body.explanation || ''
     }
-    // 无效请求
+    // 無効なリクエスト
     else {
       throw AppError.validation('Either analysisId+errorIndex or error details (errorType, original, correction) are required')
     }
 
-    // Generate learning material
+    // 学習教材を生成
     const materialContent = await generateLearningMaterial(
       errorType,
       original,
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
       body.language || 'zh'
     )
 
-    // Create material in Firestore (only if we have analysisId)
+    // Firestore に教材を作成（analysisId がある場合のみ）
     let material = null
     if (body.analysisId) {
       material = await createMaterial({
@@ -85,10 +85,10 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // Generate a temporary material ID if Firestore is not configured
+    // Firestore 未設定の場合、一時的な教材 ID を生成
     const materialId = material?.id || `temp-${Date.now()}`
 
-    // 如果是模式2（无 analysisId），返回完整的材料内容供前端使用
+    // モード2（analysisId なし）の場合、フロントエンド用に完全な教材コンテンツを返す
     if (!body.analysisId) {
       return NextResponse.json(
         successResponse({
