@@ -163,7 +163,8 @@
       "grammar": "语法错误",
       "vocabulary": "词汇错误",
       "wordOrder": "语序错误",
-      "politeness": "敬语使用"
+      "politeness": "敬语使用",
+      "clarity": "表达清晰度"
     },
     "skillTypes": {
       "grammar": "语法",

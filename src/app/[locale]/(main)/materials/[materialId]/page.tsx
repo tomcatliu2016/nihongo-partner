@@ -24,6 +24,23 @@ export default function MaterialDetailPage({ params }: PageProps) {
 
   useEffect(() => {
     async function fetchMaterial() {
+      // 支持从 sessionStorage 读取 local 材料
+      if (materialId === 'local') {
+        try {
+          const localData = sessionStorage.getItem('localMaterial')
+          if (localData) {
+            setMaterial(JSON.parse(localData))
+          }
+        } catch (error) {
+          console.error('Error loading local material:', error)
+          toast.error(t('errorLoading'))
+        } finally {
+          setIsLoading(false)
+        }
+        return
+      }
+
+      // 从 API 获取材料
       try {
         const response = await fetch(`/api/materials/${materialId}`)
         const data = await response.json()

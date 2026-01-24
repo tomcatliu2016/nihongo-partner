@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, use } from 'react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
 import { toast } from 'sonner'
@@ -20,6 +20,7 @@ export default function AnalysisSessionPage({ params }: PageProps) {
   const { sessionId } = use(params)
   const t = useTranslations('analysis')
   const router = useRouter()
+  const locale = useLocale()
 
   const [report, setReport] = useState<AnalysisReportType | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -59,6 +60,7 @@ export default function AnalysisSessionPage({ params }: PageProps) {
         body: JSON.stringify({
           analysisId: sessionId,
           errorIndex,
+          language: locale, // 根据当前语言生成解释
         }),
       })
 

@@ -164,6 +164,8 @@ export async function generateLearningMaterial(
     en: 'English',
   }
 
+  const targetLang = languageMap[userLanguage] || 'Chinese'
+
   const prompt = `Generate learning material for a Japanese language learner.
 
 Error Information:
@@ -172,21 +174,37 @@ Error Information:
 - Correction: ${correction}
 - Explanation: ${explanation}
 
-Please create learning material in ${languageMap[userLanguage] || 'Chinese'} that includes:
-1. The grammar point or vocabulary being taught
-2. A clear explanation
-3. 3-5 example sentences
-4. 3 multiple choice exercises
+IMPORTANT: ALL content must be written in ${targetLang}. Do NOT mix languages.
+
+Please create learning material that includes:
+1. Grammar point title (in ${targetLang})
+2. A clear explanation (in ${targetLang})
+3. 3-5 example sentences with Japanese and ${targetLang} translation
+4. 3 multiple choice exercises (questions and options in Japanese, as this is Japanese learning material)
+
+${userLanguage === 'ja' ? `
+Since the target language is Japanese:
+- grammarPoint: Write the title in Japanese (e.g., "具体的な選択の表現方法")
+- explanation: Write the explanation entirely in Japanese
+- examples: Japanese sentences only, no translations needed
+- exercises: All in Japanese
+` : `
+Since the target language is ${targetLang}:
+- grammarPoint: Write the title in ${targetLang}
+- explanation: Write the explanation in ${targetLang}
+- examples: Japanese sentences with ${targetLang} translations in parentheses
+- exercises: Questions in Japanese, this is for learning Japanese
+`}
 
 Respond in JSON format:
 {
-  "grammarPoint": "grammar point title",
-  "explanation": "detailed explanation",
-  "examples": ["example 1", "example 2", "example 3"],
+  "grammarPoint": "grammar point title in ${targetLang}",
+  "explanation": "detailed explanation in ${targetLang}",
+  "examples": ["example with translation if needed"],
   "exercises": [
     {
-      "question": "Fill in the blank: ___",
-      "options": ["option a", "option b", "option c", "option d"],
+      "question": "Japanese question with blank: ___",
+      "options": ["Japanese option a", "Japanese option b", "Japanese option c", "Japanese option d"],
       "correctIndex": 0
     }
   ]

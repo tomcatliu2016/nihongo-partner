@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
 import { toast } from 'sonner'
@@ -16,6 +16,7 @@ export default function LocalAnalysisPage() {
   const t = useTranslations('analysis')
   const tPractice = useTranslations('practice')
   const router = useRouter()
+  const locale = useLocale()
 
   const { lastAnalysis } = useConversationStore()
   const [report, setReport] = useState<AnalysisReportType | null>(null)
@@ -53,6 +54,7 @@ export default function LocalAnalysisPage() {
           original: error.original,
           correction: error.correction,
           explanation: error.explanation,
+          language: locale, // 根据当前语言生成解释
         }),
       })
 

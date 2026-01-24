@@ -163,7 +163,8 @@
       "grammar": "文法エラー",
       "vocabulary": "語彙エラー",
       "wordOrder": "語順エラー",
-      "politeness": "敬語の使い方"
+      "politeness": "敬語の使い方",
+      "clarity": "表現の明確さ"
     },
     "skillTypes": {
       "grammar": "文法",

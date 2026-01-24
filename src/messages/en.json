@@ -163,7 +163,8 @@
       "grammar": "Grammar Error",
       "vocabulary": "Vocabulary Error",
       "wordOrder": "Word Order Error",
-      "politeness": "Politeness Level"
+      "politeness": "Politeness Level",
+      "clarity": "Clarity"
     },
     "skillTypes": {
       "grammar": "Grammar",
